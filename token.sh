@@ -1,0 +1,1 @@
+curl --header Content-Type: application/json --data '{method:login,params:{appType:Kasa_Android,cloudUserName:bergshawnm@gmail.com,cloudPassword:Hook-em728,terminalUUID:d7a52c82-8c62-4260-87d3-4c2f2c42bf64}}' https://wap.tplinkcloud.com
