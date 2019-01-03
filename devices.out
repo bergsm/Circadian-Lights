@@ -1,0 +1,12 @@
+{"fwVer":"1.8.6 Build 180809 Rel.091659","deviceName":"Smart Wi-Fi LED Bulb with Color Changing","status":1,"alias":"Kitchen 3","deviceType":"IOT.SMARTBULB","appServerUrl":"https://use1-wap.tplinkcloud.com","deviceModel":"LB130(US)","deviceMac":"B04E26C6B5B4","role":0,"isSameRegion":true,"hwId":"111E35908497A05512E259BB76801E10","fwId":"00000000000000000000000000000000","oemId":"05BF7B3BE1675C5A6867B7A7E4C9F6F7","deviceId":"80121EE053655BB04B5D29A83226E69E19C65783","deviceHwVer":"1.0"},
+
+{"fwVer":"1.8.6 Build 180809 Rel.091659","deviceName":"Smart Wi-Fi LED Bulb with Color Changing","status":1,"alias":"Kitchen 2","deviceType":"IOT.SMARTBULB","appServerUrl":"https://use1-wap.tplinkcloud.com","deviceModel":"LB130(US)","deviceMac":"AC84C600BC75","role":0,"isSameRegion":true,"hwId":"111E35908497A05512E259BB76801E10","fwId":"00000000000000000000000000000000","oemId":"05BF7B3BE1675C5A6867B7A7E4C9F6F7","deviceId":"8012B569B7255CD98542E8D6F1F308A319C7ACC6","deviceHwVer":"1.0"},
+
+{"fwVer":"1.8.6 Build 180809 Rel.091659","deviceName":"Smart Wi-Fi LED Bulb with Color Changing","status":1,"alias":"Kitchen 1","deviceType":"IOT.SMARTBULB","appServerUrl":"https://use1-wap.tplinkcloud.com","deviceModel":"LB130(US)","deviceMac":"AC84C601A9B9","role":0,"isSameRegion":true,"hwId":"111E35908497A05512E259BB76801E10","fwId":"00000000000000000000000000000000","oemId":"05BF7B3BE1675C5A6867B7A7E4C9F6F7","deviceId":"8012CFBDD636A8E1C9B2248B3850543B19C8665F","deviceHwVer":"1.0"}]}}
+
+
+Kitchen 1: 8012CFBDD636A8E1C9B2248B3850543B19C8665F
+
+Kitchen 2: 8012B569B7255CD98542E8D6F1F308A319C7ACC6
+
+Kitchen 3: 80121EE053655BB04B5D29A83226E69E19C65783
