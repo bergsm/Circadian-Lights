@@ -1,5 +1,5 @@
 Night: 2700, 5%
-Sunset: 3000, 30%
+Evening: 3000, 30%
 Pre-sunset: 3300, 50%
 Midday(Weekday): 3800, 80%
 Midday(Weekend): 3300, 80%

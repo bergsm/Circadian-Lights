@@ -2,11 +2,11 @@ import requests
 import json
 import datetime
 
+# Useful tokens
 weather_api_token = '288eaa3e24928fe1624619297e907e5b'
-
 geoip_api_token = 'access_key=706012c40c1b18043fdcba7c996911bd' # create account at https://darksky.net/dev/
 
-
+# get the ip address for use later in geo location
 def get_ip():
     try:
         ip_url = "http://jsonip.com/"
@@ -18,27 +18,41 @@ def get_ip():
         traceback.print_exc()
         return "Error: %s. Cannot get ip." % e
 
+# Get the location from the ip address
 location_req_url = "http://api.ipstack.com/%s?%s" % (get_ip(), geoip_api_token)
 r = requests.get(location_req_url)
 location_obj = json.loads(r.text)
-
-
+# get the latitude and longitude
 lat = location_obj['latitude']
 lon = location_obj['longitude']
 
+# get the local forecast for sunrise and sunset time
 #TODO add try catch logic for getting the forecast
 weather_req_url = "https://api.darksky.net/forecast/%s/%s,%s?lang=%s&units=%s" % (weather_api_token, lat, lon, 'en','us')
-
 r = requests.get(weather_req_url)
 weather_obj = json.loads(r.text)
 
-sunrise = str(weather_obj['daily']['data'][0]['sunriseTime'])
-sunset = str(weather_obj['daily']['data'][0]['sunsetTime'])
-f = open('/home/pi/Circadian-Lights/sun.time', 'w')
+# Parse out the sunrise and sunset time and convert to cron format
+sunriseEpoch = str(weather_obj['daily']['data'][0]['sunriseTime'])
+sunrise = datetime.datetime.fromtimestamp(float(sunriseEpoch)).strftime('%M %H')
+srCronCmd = sunrise + " * * * /usr/bin/python /home/pi/Circadian-Lights/sunrise.py"
+print(srCronCmd)
 
-f.write(sunrise)
-f.write('\n')
-f.write(sunset)
-f.write('\n')
-f.close()
+sunsetEpoch = str(weather_obj['daily']['data'][0]['sunsetTime'])
+sunset = datetime.datetime.fromtimestamp(float(sunsetEpoch)).strftime('%M %H')
+ssCronCmd = sunset + " * * * /usr/bin/python /home/pi/Circadian-Lights/sunset.py"
+print(ssCronCmd)
 
+# Schedule crontab jobs to run at sunrise and sunset
+f1 = open('/home/pi/Circadian-Lights/sun.time', 'w')
+f2 = open('/home/pi/Circadian-Lights/sunRise.cron', 'w')
+f3 = open('/home/pi/Circadian-Lights/sunSet.cron', 'w')
+f1.write(sunrise)
+f1.write('\n')
+f1.write(sunset)
+f1.write('\n')
+f1.close()
+f2.write(srCronCmd)
+f3.write(ssCronCmd)
+f2.close()
+f3.close()
