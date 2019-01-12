@@ -35,18 +35,18 @@ weather_obj = json.loads(r.text)
 # Parse out the sunrise and sunset time and convert to cron format
 sunriseEpoch = str(weather_obj['daily']['data'][0]['sunriseTime'])
 sunrise = datetime.datetime.fromtimestamp(float(sunriseEpoch)).strftime('%M %H')
-srCronCmd = sunrise + " * * * pi /usr/bin/python /home/pi/Circadian-Lights/sunrise.py" + "test"
+srCronCmd = sunrise + " * * * pi /usr/bin/python /home/pi/Circadian-Lights/sunrise.py\n"
 #print(srCronCmd)
 
 sunsetEpoch = str(weather_obj['daily']['data'][0]['sunsetTime'])
 sunset = datetime.datetime.fromtimestamp(float(sunsetEpoch)).strftime('%M %H')
-ssCronCmd = sunset + " * * * pi /usr/bin/python /home/pi/Circadian-Lights/sunset.py" + "test"
+ssCronCmd = sunset + " * * * pi /usr/bin/python /home/pi/Circadian-Lights/sunset.py\n"
 #print(ssCronCmd)
 
 # Schedule crontab jobs to run at sunrise and sunset
 #f1 = open('/home/pi/Circadian-Lights/sun.time', 'w')
-f2 = open('/home/pi/Circadian-Lights/sunRise.cron', 'w')
-f3 = open('/home/pi/Circadian-Lights/sunSet.cron', 'w')
+f2 = open('/home/pi/Circadian-Lights/sunriseCron', 'w')
+f3 = open('/home/pi/Circadian-Lights/sunsetCron', 'w')
 #f1.write(sunrise)
 #f1.write('\n')
 #f1.write(sunset)
