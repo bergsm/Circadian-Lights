@@ -1,4 +1,5 @@
 import requests
+import json
 
 bulb1 = "8012CFBDD636A8E1C9B2248B3850543B19C8665F"
 
@@ -41,6 +42,17 @@ def getStatus(bulb):
     r = requests.post(url, data=data, headers=header)
     #debug(r)
 
+# initialize the file for the dictionary of the devices and their IDs
+def initDev():
+    data = '{method:getDeviceList}'
+    r = requests.post(url, data=data, headers=header)
+    response = json.loads(r.text)
+    f = open('/home/pi/Circadian-Lights/devices.list', 'w')
+    for each in response['result']['deviceList']:
+        f.write(each['deviceId'] + "\n")
+    #debug(r)
+
+#initDev()
 #getStatus(bulb1)
 #setLight(bulb1, 3545, 75)
 #setDefHard(bulb1, 1)
