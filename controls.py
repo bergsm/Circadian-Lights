@@ -23,14 +23,14 @@ def setDefHard(bulb, index):
     #hard on (with switch)
     data = '{"method":"passthrough", "params": {"deviceId": "' + bulb + '", "requestData": "{\\\"smartlife.iot.smartbulb.lightingservice\\\":{\\\"set_default_behavior\\\":{\\\"hard_on\\\":{\\\"mode\\\":\\\"customize_preset\\\",\\\"index\\\":' + str(index) + '}}}}" }}'
     r = requests.post(url, data=data, headers=header)
-    #debug(r)
+    debug(r)
     
 # change the default behavior of the light bulb when turned on by software to a preset index
 def setDefSoft(bulb, index):
     #soft on (with app or alexa)
     data = '{"method":"passthrough", "params": {"deviceId": "' + bulb + '", "requestData": "{\\\"smartlife.iot.smartbulb.lightingservice\\\":{\\\"set_default_behavior\\\":{\\\"soft_on\\\":{\\\"mode\\\":\\\"customize_preset\\\",\\\"index\\\":' + str(index) + '}}}}" }}'
     r = requests.post(url, data=data, headers=header)
-    #debug(r)
+    debug(r)
 
 # change the light
 # transition time should be in seconds
@@ -38,25 +38,29 @@ def setLight(bulb, trans, temp, brightness):
     trans = trans * 1000
     data = '{"method":"passthrough", "params": {"deviceId": "' + bulb + '", "requestData": "{\\\"smartlife.iot.smartbulb.lightingservice\\\":{\\\"transition_light_state\\\":{\\\"ignore_default\\\":1, \\\"transition_period\\\":'+ str(trans) + ', \\\"on_off\\\":1, \\\"color_temp\\\":' + str(temp) + ', \\\"brightness\\\":' + str(brightness) + '}}}" }}'
     r = requests.post(url, data=data, headers=header)
-    #debug(r)
+    debug(r)
 
 # change a preset
 def setPreset(bulb, index, temp, brightness):
     data = '{"method":"passthrough", "params": {"deviceId": "' + bulb + '", "requestData": "{\\\"smartlife.iot.smartbulb.lightingservice\\\":{\\\"set_preferred_state\\\":{\\\"saturation\\\":0,\\\"index\\\":' + str(index) + ',\\\"hue\\\":0,\\\"color_temp\\\":' + str(temp) + ',\\\"brightness\\\":' + str(brightness) + '}}}" }}'
     r = requests.post(url, data=data, headers=header)
-    #debug(r)
+    debug(r)
 
 # used to get the current status of the light
 def getStatus(bulb):
     data = '{"method":"passthrough", "params": {"deviceId": "' + bulb + '", "requestData": "{\\\"smartlife.iot.smartbulb.lightingservice\\\":{\\\"get_light_state\\\":\\\"\\\"}}" }}'     
     r = requests.post(url, data=data, headers=header)
-    #debug(r)
+    debug(r)
     response = json.loads(r.text)
     if response['error_code'] == 0:
         bulbStatus = json.loads((response['result']['responseData']))
         on_off = bulbStatus['smartlife.iot.smartbulb.lightingservice']['get_light_state']['on_off']
-        temp = bulbStatus['smartlife.iot.smartbulb.lightingservice']['get_light_state']['color_temp']
-        brightness = bulbStatus['smartlife.iot.smartbulb.lightingservice']['get_light_state']['brightness']
+        if on_off == 0:
+            temp = 0
+            brightness = 0
+        else:
+            temp = bulbStatus['smartlife.iot.smartbulb.lightingservice']['get_light_state']['color_temp']
+            brightness = bulbStatus['smartlife.iot.smartbulb.lightingservice']['get_light_state']['brightness']
         #print(on_off, temp, brightness)
         return[on_off, temp, brightness]
     else:
@@ -71,7 +75,7 @@ def initDev():
     f = open('/home/pi/Circadian-Lights/devices.list', 'w+')
     for each in response['result']['deviceList']:
         f.write(each['deviceId'] + "\n")
-    #debug(r)
+    debug(r)
 
 
 #debug controls000

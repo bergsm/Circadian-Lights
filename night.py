@@ -91,16 +91,16 @@ def transition(bulbs, states):
     status = controls.getStatus(bulbs[0]) 
 
     # read values for next state from file
-    targetTemp = states['Midday(WD)']['Temp'] 
-    targetBrightness = states['Midday(WD)']['Brightness'] 
+    targetTemp = states['Night']['Temp'] 
+    targetBrightness = states['Night']['Brightness'] 
     print("targetTemp: " + str(targetTemp))
     print("targetBrightness: " + str(targetBrightness))
 
     # if light off
     if status == "error" or status[0] == 0:
         # use night values for curr values
-        currTemp = states['Night']['Temp']
-        currBrightness = states['Night']['Brightness']
+        currTemp = states['Evening']['Temp']
+        currBrightness = states['Evening']['Brightness']
     # light must be on so use current values 
     else:
         currTemp = status[1]

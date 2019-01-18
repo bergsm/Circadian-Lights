@@ -1,8 +1,0 @@
-{
-    "Night":{"Temp":2700,"Brightness":5}, 
-    "Evening":{"Temp":3000,"Brightness":30},
-    "Pre-sunset":{"Temp":3300,"Brightness":50},
-    "Midday(WD)":{"Temp":3800,"Brightness":80},
-    "Midday(WE)":{"Temp":3300,"Brightness":80}
-}
-
