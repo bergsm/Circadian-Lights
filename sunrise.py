@@ -23,7 +23,7 @@ def loadStates():
     if os.path.exists("/home/pi/Circadian-Lights/values.target"):
         f = open("/home/pi/Circadian-Lights/values.target", "r")
         #text = f.readlines()
-        print(text)
+        #print(text)
         states = json.loads(f.read())
     else:
         #controls.initDev()

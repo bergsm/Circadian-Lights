@@ -23,7 +23,7 @@ def loadStates():
     if os.path.exists("/home/pi/Circadian-Lights/values.target"):
         f = open("/home/pi/Circadian-Lights/values.target", "r")
         #text = f.readlines()
-        print(text)
+        #print(text)
         states = json.loads(f.read())
     else:
         #controls.initDev()
@@ -107,7 +107,7 @@ def transition(bulbs, states):
         currBrightness = status[2]
 
     # interval in seconds (300 is default)
-    interval = 300
+    interval = 0
     tempInt = (targetTemp - currTemp)/12
     print("tempInt " + str(tempInt))
     nextTemp = currTemp + tempInt
