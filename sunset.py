@@ -107,7 +107,7 @@ def transition(bulbs, states):
         currBrightness = status[2]
 
     # interval in seconds (300 is default)
-    interval = 0
+    interval = 300
     tempInt = (targetTemp - currTemp)/12
     print("tempInt " + str(tempInt))
     nextTemp = currTemp + tempInt
