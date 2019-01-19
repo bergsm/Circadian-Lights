@@ -34,12 +34,12 @@ weather_obj = json.loads(r.text)
 
 # Parse out the sunrise and sunset time and convert to cron format
 sunriseEpoch = str(weather_obj['daily']['data'][0]['sunriseTime'])
-sunrise = datetime.datetime.fromtimestamp(float(sunriseEpoch)).strftime('%M %H')
+sunrise = (datetime.datetime.fromtimestamp(float(sunriseEpoch))-datetime.timedelta(hours=0, minutes=30)).strftime('%M %H')
 srCronCmd = sunrise + " * * * pi /usr/bin/python /home/pi/Circadian-Lights/sunrise.py >> /home/pi/Circadian-Lights/cron.log 2>&1\n"
 #print(srCronCmd)
 
 sunsetEpoch = str(weather_obj['daily']['data'][0]['sunsetTime'])
-sunset = datetime.datetime.fromtimestamp(float(sunsetEpoch)).strftime('%M %H')
+sunset = (datetime.datetime.fromtimestamp(float(sunsetEpoch))-datetime.timedelta(hours=0, minutes=30)).strftime('%M %H')
 ssCronCmd = sunset + " * * * pi /usr/bin/python /home/pi/Circadian-Lights/sunset.py >> /home/pi/Circadian-Lights/cron.log 2>&1\n"
 #print(ssCronCmd)
 
