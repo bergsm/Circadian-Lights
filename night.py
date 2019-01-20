@@ -108,28 +108,28 @@ def transition(bulbs, states):
 
     # interval in seconds
     interval = 150
-    tempInt = (targetTemp - currTemp)/12
+    tempInt = int((targetTemp - currTemp)/12.0)
     print("tempInt " + str(tempInt))
-    nextTemp = currTemp + tempInt
     
-    brightInt = (targetBrightness - currBrightness)/12
+    brightInt = int((targetBrightness - currBrightness)/12.0)
     print("brightInt " + str(brightInt))
-    nextBrightness = currBrightness + brightInt
 
     # while current bulb brightness and temp != daytime brightness and temp
     final = False
     for i in range(12):
         print(i)
+        print("currTemp = " + str(currTemp) + ", currBrightness = " + str(currBrightness))
+        
+        # set the next temps and brightnesses
+        nextTemp = currTemp + tempInt
+        nextBrightness = currBrightness + brightInt
+        print("nextTemp = " + str(nextTemp) + ", nextBrightness = " + str(nextBrightness))
+        
         if i == 11:
             final = True
         # change the lights
         changeLight(interval, nextTemp, nextBrightness, final)
 
-        print("currTemp = " + str(currTemp) + ", currBrightness = " + str(currBrightness))
-        # set the next temps and brightnesses
-        nextTemp = currTemp + tempInt
-        nextBrightness = currBrightness + brightInt
-        print("nextTemp = " + str(nextTemp) + ", nextBrightness = " + str(nextBrightness))
         currTemp = nextTemp
         currBrightness = nextBrightness
 
