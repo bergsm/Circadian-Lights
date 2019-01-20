@@ -123,11 +123,14 @@ def transition(bulbs, states):
         # set the next temps and brightnesses
         nextTemp = currTemp + tempInt
         nextBrightness = currBrightness + brightInt
-        print("nextTemp = " + str(nextTemp) + ", nextBrightness = " + str(nextBrightness))
         
         if i == 11:
             final = True
+            nextTemp = targetTemp
+            nextBrightness = targetBrightness
+        
         # change the lights
+        print("nextTemp = " + str(nextTemp) + ", nextBrightness = " + str(nextBrightness))
         changeLight(interval, nextTemp, nextBrightness, final)
 
         currTemp = nextTemp
