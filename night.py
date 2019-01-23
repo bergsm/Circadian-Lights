@@ -39,30 +39,38 @@ def changeLight(interval, targetTemp, targetBrightness, final):
     count = 0
     # if light unresponsive and last change
     if status == "error" and final == True: 
+        print("unresponsive light and last change")
         # inf loop and wait to make change
         while(status == "error"):
             #TODO change to as fast as possible once we network directly
             time.sleep(1)
+            print("waiting...")
             if count < interval:
                 count+=1
             status = controls.getStatus(bulbs[0])
 
     # if light unresponsive and not last change
     elif status == "error" and final == False:
+        print("unresponsive light but not last change")
         # wait for the specifed time interval
         while(count < interval):
             if status == "error":
+                print("waiting...")
                 time.sleep(1)
                 count+=1
+                status = controls.getStatus(bulbs[0])
             # if light comes on, change it
             elif status != "error":
+                print("light now on!")
                 break
             # if light doesn't come on during interval, skip
             if count >= interval:
+                print("skipping..")
                 return
     
     # if light responsive and off
     if status[0] == 0:
+        print("light responsive and off")
         # set light to be target next time turned on
         for bulb in bulbs:
             controls.setPreset(bulb, 0, targetTemp, targetBrightness)
@@ -74,6 +82,7 @@ def changeLight(interval, targetTemp, targetBrightness, final):
     
     # if light responsive and on
     if status[0] == 1:
+        print("light responsive and on")
         for bulb in bulbs:
             # transition light over specified length of time
             controls.setLight(bulb, interval-count, targetTemp, targetBrightness)
@@ -82,6 +91,7 @@ def changeLight(interval, targetTemp, targetBrightness, final):
             controls.setDef(bulb, 0)
         # wait for next command
         if count < interval:
+            print("sleep time = " + str(interval-count))
             time.sleep(interval-count)
 
 # slowly transition the light from night to daytime

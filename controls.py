@@ -77,21 +77,3 @@ def initDev():
         f.write(each['deviceId'] + "\n")
     debug(r)
 
-
-#debug controls000
-#initDev()
-#getStatus(bulb1)
-#setLight(bulb1, 300, 3800, 5)
-#getStatus(bulb1)
-#getStatus(bulb2)
-#setLight(bulb2, 300, 3800, 5)
-#getStatus(bulb2)
-#getStatus(bulb3)
-#setLight(bulb3, 1, 3800, 5)
-#getStatus(bulb3)
-#getStatus(bulb1)
-#setLight(bulb1, 300, 3734, 76)
-#getStatus(bulb1)
-#setDefHard(bulb1, 1)
-#setDefSoft(bulb1, 1)
-#setPreset(bulb1, 0, 3800, 80)
