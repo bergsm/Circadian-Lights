@@ -35,6 +35,7 @@ def setDefSoft(bulb, index):
 # change the light
 # transition time should be in seconds
 def setLight(bulb, trans, temp, brightness):
+    #TODO change to direct message with bulb via socket
     trans = trans * 1000
     data = '{"method":"passthrough", "params": {"deviceId": "' + bulb + '", "requestData": "{\\\"smartlife.iot.smartbulb.lightingservice\\\":{\\\"transition_light_state\\\":{\\\"ignore_default\\\":1, \\\"transition_period\\\":'+ str(trans) + ', \\\"on_off\\\":1, \\\"color_temp\\\":' + str(temp) + ', \\\"brightness\\\":' + str(brightness) + '}}}" }}'
     r = requests.post(url, data=data, headers=header)
