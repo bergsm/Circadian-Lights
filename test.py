@@ -1,5 +1,3 @@
-#from __future__ import division
-
 def test(targetTemp, currTemp, targetBrightness, currBrightness):    
     print(targetTemp - currTemp)
     tempInt = int((targetTemp - currTemp)/12.0)
@@ -31,5 +29,3 @@ def test(targetTemp, currTemp, targetBrightness, currBrightness):
 
 
 test(2875, 3800, 30, 80)
-
-
