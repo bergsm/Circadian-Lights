@@ -119,6 +119,7 @@ def changeLight(interval, targetTemp, targetBrightness, final):
         for bulb in bulbs:
             # transition light over specified length of time
             controls.setLight(bulb, interval-count, targetTemp, targetBrightness)
+        for bulb in bulbs:
             # set light to be target next time turned on
             controls.setPreset(bulb, 0, targetTemp, targetBrightness)
             controls.setDef(bulb, 0)

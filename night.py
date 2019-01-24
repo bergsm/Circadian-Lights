@@ -115,9 +115,12 @@ def changeLight(interval, targetTemp, targetBrightness, final):
     # if light responsive and on
     if status[0] == 1:
         print("light responsive and on")
+        
+        # I split this into two loops to have the actual changing of each light closer together
         for bulb in bulbs:
             # transition light over specified length of time
             controls.setLight(bulb, interval-count, targetTemp, targetBrightness)
+        for bulb in bulbs:
             # set light to be target next time turned on
             controls.setPreset(bulb, 0, targetTemp, targetBrightness)
             controls.setDef(bulb, 0)
