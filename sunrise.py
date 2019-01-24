@@ -2,6 +2,7 @@ import controls as controls
 import time 
 import os 
 import json 
+import signal 
 
 
 # load devices in from file
@@ -20,6 +21,7 @@ def loadDev():
 
 # load the relevant values in from the file
 def loadStates():
+    #TODO remove conditional or flesh out else statement
     if os.path.exists("/home/pi/Circadian-Lights/values.target"):
         f = open("/home/pi/Circadian-Lights/values.target", "r")
         #text = f.readlines()
@@ -31,8 +33,38 @@ def loadStates():
         states = json.loads(f.read())
 
     return states
+
+
+def killLast():
+    # check last.pid
+    print("Checking for any hanging scripts")
+    f = open("/home/pi/Circadian-Lights/last.pid", "r")
+    pid = int(f.readline())
     
-    
+    # If script still running
+    if pid >= 0:
+        #kill
+        try:
+            os.kill(pid, signal.SIGTERM)
+        except:
+            print("Unable to kill previous process")
+        else:
+            print("Killed " + str(pid))
+    else:
+        print("Nothing to kill")
+
+
+def writePID(hanging):
+    if hanging == True:
+        f = open("/home/pi/Circadian-Lights/last.pid", "w+")
+        f.write(str(os.getpid()))
+        print("Wrote PID to file")
+    else:
+        f = open("/home/pi/Circadian-Lights/last.pid", "w+")
+        f.write(str(-1))
+        print("Wrote dummy PID to file")
+ 
+ 
 # change the light
 def changeLight(interval, targetTemp, targetBrightness, final):
     status = controls.getStatus(bulbs[0])
@@ -40,6 +72,7 @@ def changeLight(interval, targetTemp, targetBrightness, final):
     # if light unresponsive and last change
     if status == "error" and final == True: 
         print("unresponsive light and last change")
+        writePID(True)
         # inf loop and wait to make change
         while(status == "error"):
             #TODO change to as fast as possible once we network directly
@@ -58,6 +91,7 @@ def changeLight(interval, targetTemp, targetBrightness, final):
                 print("waiting...")
                 time.sleep(1)
                 count+=1
+                status = controls.getStatus(bulbs[0])
             # if light comes on, change it
             elif status != "error":
                 print("light now on!")
@@ -145,7 +179,8 @@ def transition(bulbs, states):
         currTemp = nextTemp
         currBrightness = nextBrightness
 
-
+killLast()
 bulbs = loadDev()
 states = loadStates()
 transition(bulbs, states)
+writePID(False)
