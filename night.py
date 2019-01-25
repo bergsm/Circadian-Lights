@@ -119,6 +119,7 @@ def changeLight(interval, targetTemp, targetBrightness, final):
         # I split this into two loops to have the actual changing of each light closer together
         for bulb in bulbs:
             # transition light over specified length of time
+            print("Transition period: " + str(interval-count))
             controls.setLight(bulb, interval-count, targetTemp, targetBrightness)
         for bulb in bulbs:
             # set light to be target next time turned on
