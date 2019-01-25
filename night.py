@@ -77,7 +77,7 @@ def changeLight(interval, targetTemp, targetBrightness, final):
             #TODO change to as fast as possible once we network directly
             time.sleep(1)
             print("waiting...")
-            if count < interval:
+            if count < interval-1:
                 count+=1
             status = controls.getStatus(bulbs[0])
 
