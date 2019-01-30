@@ -25,6 +25,10 @@ header = {"Content-Type": "application/json"}
 controls.setLightDirect(bulb1IP, 1, 3800, 80)
 controls.setLightDirect(bulb2IP, 1, 3800, 80)
 controls.setLightDirect(bulb3IP, 1, 3800, 80)
+
+#controls.setLightDirect(bulb1IP, 1, 2875, 30)
+#controls.setLightDirect(bulb2IP, 1, 2875, 30)
+#controls.setLightDirect(bulb3IP, 1, 2875, 30)
 #controls.setPreset(bulb2, 0, 3800, 80)
 #controls.setDefHard(bulb2, 0)
 #controls.setDefSoft(bulb2, 0)
