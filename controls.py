@@ -3,14 +3,37 @@ import json
 import socket
 from struct import pack
 
-bulb1 = "8012CFBDD636A8E1C9B2248B3850543B19C8665F"
-bulb2 = "8012B569B7255CD98542E8D6F1F308A319C7ACC6"
-bulb3 = "80121EE053655BB04B5D29A83226E69E19C65783"
+#bulb1 = "8012CFBDD636A8E1C9B2248B3850543B19C8665F"
+#bulb2 = "8012B569B7255CD98542E8D6F1F308A319C7ACC6"
+#bulb3 = "80121EE053655BB04B5D29A83226E69E19C65783"
 
+bulb1 = "192.168.1.143"
+bulb2 = "192.168.1.102"
+bulb3 = "192.168.1.121"
 
-url = "https://wap.tplinkcloud.com?token=ddc8c82d-A3pashRN9PvhV4s6HmfJyVe"
+PORT = 9999
 
-header = {"Content-Type": "application/json"}
+def encrypt(string):
+    key = 171
+    result = pack('>I', len(string))
+    for i in string:
+        a = key ^ ord(i)
+        key = a
+        result += chr(a)
+    return result
+
+def decrypt(string):
+    key = 171
+    result = ""
+    for i in string:
+        a = key ^ ord(i)
+        key = ord(i)
+        result += chr(a)
+    return result
+
+#url = "https://wap.tplinkcloud.com?token=ddc8c82d-A3pashRN9PvhV4s6HmfJyVe"
+
+#header = {"Content-Type": "application/json"}
 
 def debug(request):
     print(request.text)
