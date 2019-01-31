@@ -35,8 +35,19 @@ def decrypt(string):
 
 #header = {"Content-Type": "application/json"}
 
-def debug(request):
-    print(request.text)
+def sockSend(bulb, data):
+    try:
+        s =  socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((bulb, PORT))
+        s.send(encrypt(data))
+        r = s.recv(2048)
+        print(decrypt(r[4:]))
+        s.close()
+    except socket.error:
+        print("Could not connect to host " + bulb1IP + ":" + str(port))
+ 
+#def debug(request):
+#    print(request.text)
 
 def setDef(bulb, index):
     setDefHard(bulb, index)
@@ -45,9 +56,11 @@ def setDef(bulb, index):
 # change the default behavior of the light bulb when turned on by switch to a preset index
 def setDefHard(bulb, index):
     #hard on (with switch)
-    data = '{"method":"passthrough", "params": {"deviceId": "' + bulb + '", "requestData": "{\\\"smartlife.iot.smartbulb.lightingservice\\\":{\\\"set_default_behavior\\\":{\\\"hard_on\\\":{\\\"mode\\\":\\\"customize_preset\\\",\\\"index\\\":' + str(index) + '}}}}" }}'
-    r = requests.post(url, data=data, headers=header)
-    debug(r)
+    #data = '{"method":"passthrough", "params": {"deviceId": "' + bulb + '", "requestData": "{\\\"smartlife.iot.smartbulb.lightingservice\\\":{\\\"set_default_behavior\\\":{\\\"hard_on\\\":{\\\"mode\\\":\\\"customize_preset\\\",\\\"index\\\":' + str(index) + '}}}}" }}'
+    data = "{"smartlife.iot.smartbulb.lightingservice":{"set_default_behavior":{"hard_on":{"mode":"customize_preset","index":index}}}}"
+    #r = requests.post(url, data=data, headers=header)
+    #debug(r)
+    sendSock(bulb, data)
     
 # change the default behavior of the light bulb when turned on by software to a preset index
 def setDefSoft(bulb, index):
@@ -90,6 +103,24 @@ def getStatus(bulb):
     else:
         return "error"
 
+
+def setLightDirect(bulb, trans, temp, brightness):
+    #TODO change to direct message with bulb via socket
+    trans = trans * 1000
+    data = '{"smartlife.iot.smartbulb.lightingservice":{"transition_light_state":{"ignore_default":1, "transition_period":' + str(trans) + ', "on_off":1, "color_temp":' + str(temp) + ', "brightness":' + str(brightness) + '}}}'
+
+
+    try:
+        s =  socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((bulb, PORT))
+        s.send(encrypt(data))
+        r = s.recv(2048)
+        print(decrypt(r[4:]))
+        s.close()
+    except socket.error:
+        print("Could not connect to host " + bulb1IP + ":" + str(port))
+        
+ 
 # initialize the file for the dictionary of the devices and their IDs
 def initDev():
     data = '{method:getDeviceList}'
