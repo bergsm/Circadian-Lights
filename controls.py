@@ -98,6 +98,7 @@ def getStatus(bulb):
         return "error"
  
 # initialize the file for the dictionary of the devices and their IDs
+#TODO change function to initialize devices.list to IP addresses
 def initDev():
     data = '{method:getDeviceList}'
     r = requests.post(url, data=data, headers=header)
