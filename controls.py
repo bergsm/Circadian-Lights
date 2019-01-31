@@ -1,6 +1,7 @@
 import requests
 import json
 import socket
+from struct import pack
 
 bulb1 = "8012CFBDD636A8E1C9B2248B3850543B19C8665F"
 bulb2 = "8012B569B7255CD98542E8D6F1F308A319C7ACC6"
