@@ -16,6 +16,7 @@ def loadDev():
         f = open("/home/pi/Circadian-Lights/devices.list", "r")
         bulbs = f.read().splitlines()
 
+    print("Devices loaded successfully")
     return bulbs
 
 
@@ -31,6 +32,7 @@ def loadStates():
         f = open("/home/pi/Circadian-Lights/values.target", "r")
         states = json.loads(f.read())
 
+    print("States loaded successfully")
     return states
 
 
