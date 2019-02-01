@@ -27,7 +27,7 @@ def loadStates():
         #print(text)
         states = json.loads(f.read())
     else:
-        #controls.initDev()
+        #TODO Use default values and save those to file
         f = open("/home/pi/Circadian-Lights/values.target", "r")
         states = json.loads(f.read())
 
@@ -74,8 +74,6 @@ def changeLight(interval, targetTemp, targetBrightness, final):
         writePID(True)
         # inf loop and wait to make change
         while(status == "error"):
-            #TODO change to as fast as possible once we network directly
-            time.sleep(1)
             print("waiting...")
             if count < interval-1:
                 count+=1
