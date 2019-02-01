@@ -5,10 +5,6 @@ import json
 import socket
 from struct import pack
 
-bulb1 = "192.168.1.143"
-bulb2 = "192.168.1.102"
-bulb3 = "192.168.1.121"
-
 PORT = 9999
 
 def encrypt(string):
