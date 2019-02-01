@@ -144,8 +144,8 @@ def transition(bulbs, states):
     # if light off
     if status == "error" or status[0] == 0:
         # use night values for curr values
-        currTemp = states['Midday(WD)']['Temp']
-        currBrightness = states['Midday(WD)']['Brightness']
+        currTemp = states['Midday']['Temp']
+        currBrightness = states['Midday']['Brightness']
     # light must be on so use current values 
     else:
         currTemp = status[1]

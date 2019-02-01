@@ -136,8 +136,8 @@ def transition(bulbs, states):
     status = controls.getStatus(bulbs[0]) 
 
     # read values for next state from file
-    targetTemp = states['Midday(WD)']['Temp'] 
-    targetBrightness = states['Midday(WD)']['Brightness'] 
+    targetTemp = states['Midday']['Temp'] 
+    targetBrightness = states['Midday']['Brightness'] 
     print("targetTemp: " + str(targetTemp))
     print("targetBrightness: " + str(targetBrightness))
 
