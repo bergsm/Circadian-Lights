@@ -1,11 +1,9 @@
 import requests
+import subprocess
+import os
 import json
 import socket
 from struct import pack
-
-#bulb1 = "8012CFBDD636A8E1C9B2248B3850543B19C8665F"
-#bulb2 = "8012B569B7255CD98542E8D6F1F308A319C7ACC6"
-#bulb3 = "80121EE053655BB04B5D29A83226E69E19C65783"
 
 bulb1 = "192.168.1.143"
 bulb2 = "192.168.1.102"
@@ -30,10 +28,6 @@ def decrypt(string):
         key = ord(i)
         result += chr(a)
     return result
-
-#url = "https://wap.tplinkcloud.com?token=ddc8c82d-A3pashRN9PvhV4s6HmfJyVe"
-
-#header = {"Content-Type": "application/json"}
 
 def sockSend(bulb, data):
     try:
@@ -98,14 +92,20 @@ def getStatus(bulb):
         return "error"
  
 # initialize the file for the dictionary of the devices and their IDs
-#TODO change function to initialize devices.list to IP addresses
 def initDev():
-    data = '{method:getDeviceList}'
-    r = requests.post(url, data=data, headers=header)
-    response = json.loads(r.text)
-    #TODO substitute user env variable for pi
-    f = open('/home/pi/Circadian-Lights/devices.list', 'w+')
-    for each in response['result']['deviceList']:
-        f.write(each['deviceId'] + "\n")
-    debug(r)
+    # call bash script to save network devices to file
+    subprocess.call("bash/devIP.sh")
 
+    # open network list for reading
+    fin = open('/home/pi/Circadian-Lights/network.list', 'r')
+    fout = open('/home/pi/Circadian-Lights/devices.list', 'w+')
+    text = fin.readlines()
+    for line in text:
+        if line[0:5] == "LB130":
+            for i in range(0, len(line)):
+                if line[i] == '(':
+                    IP = line[i+1:i+14]
+                    fout.write(IP + "\n")
+
+    # delete network.list file
+    os.remove('network.list')
