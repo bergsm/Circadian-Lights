@@ -126,11 +126,13 @@ def changeLight(interval, targetTemp, targetBrightness, final):
         
         # I split this into two loops to have the actual changing of each light closer together
         start = time.time()
-        for bulb in bulbs:
-            # transition light over specified length of time
-            transition = max(interval-count, 1)
-            print("Transition period: " + str(transition))
-            controls.setLight(bulb, transition, targetTemp, targetBrightness)
+        #TODO add in manual override detection. Only change light if no manual override detected
+        if status[1] != 0:
+            for bulb in bulbs:
+                # transition light over specified length of time
+                transition = max(interval-count, 1)
+                print("Transition period: " + str(transition))
+                controls.setLight(bulb, transition, targetTemp, targetBrightness)
         for bulb in bulbs:
             # set light to be target next time turned on
             controls.setPreset(bulb, 0, targetTemp, targetBrightness)
