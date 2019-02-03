@@ -44,14 +44,8 @@ ssCronCmd = sunset + " * * * pi /usr/bin/python /home/pi/Circadian-Lights/sunset
 #print(ssCronCmd)
 
 # Schedule crontab jobs to run at sunrise and sunset
-#f1 = open('/home/pi/Circadian-Lights/sun.time', 'w')
 f2 = open('/etc/cron.d/sunriseCron', 'w')
 f3 = open('/etc/cron.d/sunsetCron', 'w')
-#f1.write(sunrise)
-#f1.write('\n')
-#f1.write(sunset)
-#f1.write('\n')
-#f1.close()
 f2.write(srCronCmd)
 f3.write(ssCronCmd)
 f2.close()
