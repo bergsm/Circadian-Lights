@@ -36,7 +36,8 @@ def sockSend(bulb, data):
         s.close()
         return recv
     except socket.error:
-        print("Could not connect to host " + bulb1IP + ":" + str(port))
+        print("Could not connect to host " + bulb + ":" + str(PORT))
+        return "error"
  
 #def debug(request):
 #    print(request.text)
@@ -73,7 +74,10 @@ def setPreset(bulb, index, temp, brightness):
 def getStatus(bulb):
     data = '{"smartlife.iot.smartbulb.lightingservice":{"get_light_state":""}}'
     r = sockSend(bulb, data) 
-    response = json.loads(r)
+    if r == "error":
+        return r
+    else:
+        response = json.loads(r)
     if response['smartlife.iot.smartbulb.lightingservice']['get_light_state']['err_code'] == 0:
         on_off = response['smartlife.iot.smartbulb.lightingservice']['get_light_state']['on_off']
         if on_off == 0:

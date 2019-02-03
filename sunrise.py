@@ -16,22 +16,23 @@ def loadDev():
         f = open("/home/pi/Circadian-Lights/devices.list", "r")
         bulbs = f.read().splitlines()
 
+    print("Devices loaded successfully")
     return bulbs
 
 
 # load the relevant values in from the file
 def loadStates():
-    #TODO remove conditional or flesh out else statement
     if os.path.exists("/home/pi/Circadian-Lights/values.target"):
         f = open("/home/pi/Circadian-Lights/values.target", "r")
         #text = f.readlines()
         #print(text)
         states = json.loads(f.read())
     else:
-        #controls.initDev()
+        #TODO Use default values and save those to file
         f = open("/home/pi/Circadian-Lights/values.target", "r")
         states = json.loads(f.read())
 
+    print("States loaded successfully")
     return states
 
 
@@ -75,8 +76,6 @@ def changeLight(interval, targetTemp, targetBrightness, final):
         writePID(True)
         # inf loop and wait to make change
         while(status == "error"):
-            #TODO change to as fast as possible once we network directly
-            time.sleep(1)
             print("waiting...")
             if count < interval-1:
                 count+=1
@@ -116,6 +115,8 @@ def changeLight(interval, targetTemp, targetBrightness, final):
     # if light responsive and on
     if status[0] == 1:
         print("light responsive and on")
+
+        # I split this into two loops to have the actual changing of each light closer together
         for bulb in bulbs:
             # transition light over specified length of time
             print("Transition period: " + str(interval-count))
@@ -136,8 +137,8 @@ def transition(bulbs, states):
     status = controls.getStatus(bulbs[0]) 
 
     # read values for next state from file
-    targetTemp = states['Midday(WD)']['Temp'] 
-    targetBrightness = states['Midday(WD)']['Brightness'] 
+    targetTemp = states['Midday']['Temp'] 
+    targetBrightness = states['Midday']['Brightness'] 
     print("targetTemp: " + str(targetTemp))
     print("targetBrightness: " + str(targetBrightness))
 
