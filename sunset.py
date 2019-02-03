@@ -16,7 +16,6 @@ def loadDev():
         f = open("/home/pi/Circadian-Lights/devices.list", "r")
         bulbs = f.read().splitlines()
 
-
     print("Devices loaded successfully")
     return bulbs
 
@@ -25,13 +24,13 @@ def loadDev():
 def loadStates():
     if os.path.exists("/home/pi/Circadian-Lights/values.target"):
         f = open("/home/pi/Circadian-Lights/values.target", "r")
-        #text = f.readlines()
-        #print(text)
         states = json.loads(f.read())
     else:
-        #TODO Use default values and save those to file
-        f = open("/home/pi/Circadian-Lights/values.target", "r")
-        states = json.loads(f.read())
+        states = {"Night":{"Temp":2700,"Brightness":1},\
+                  "Evening":{"Temp":2875,"Brightness":30},\
+                  "Midday":{"Temp":3800,"Brightness":80}}
+        f = open("/home/pi/Circadian-Lights/values.target", "w+")
+        f.write(json.dumps(states))
 
     print("States loaded successfully")
     return states
@@ -65,12 +64,14 @@ def writePID(hanging):
         f = open("/home/pi/Circadian-Lights/last.pid", "w+")
         f.write(str(-1))
         print("Wrote dummy PID to file")
- 
+
 
 # change the light
 def changeLight(interval, targetTemp, targetBrightness, final):
+    start = time.time()
     status = controls.getStatus(bulbs[0])
-    count = 0
+    end = time.time()
+    count = int(end-start)
     # if light unresponsive and last change
     if status == "error" and final == True: 
         print("unresponsive light and last change")
@@ -78,9 +79,11 @@ def changeLight(interval, targetTemp, targetBrightness, final):
         # inf loop and wait to make change
         while(status == "error"):
             print("waiting...")
-            if count < interval-1:
-                count+=1
+            start = time.time()
             status = controls.getStatus(bulbs[0])
+            end = time.time()
+            if count < interval:
+                count+=int(end-start)
 
     # if light unresponsive and not last change
     elif status == "error" and final == False:
@@ -89,9 +92,10 @@ def changeLight(interval, targetTemp, targetBrightness, final):
         while(count < interval):
             if status == "error":
                 print("waiting...")
-                time.sleep(1)
-                count+=1
+                start = time.time()
                 status = controls.getStatus(bulbs[0])
+                end = time.time()
+                count+=int(end-start)
             # if light comes on, change it
             elif status != "error":
                 print("light now on!")
@@ -105,27 +109,34 @@ def changeLight(interval, targetTemp, targetBrightness, final):
     if status[0] == 0:
         print("light responsive and off")
         # set light to be target next time turned on
+        start = time.time()
         for bulb in bulbs:
             controls.setPreset(bulb, 0, targetTemp, targetBrightness)
             controls.setDef(bulb, 0)
+        end = time.time()
+        count += int(end-start)
         # wait for next command
         if count < interval:
             print("sleep time = " + str(interval-count))
             time.sleep(interval-count)
-    
+
     # if light responsive and on
     if status[0] == 1:
         print("light responsive and on")
 
         # I split this into two loops to have the actual changing of each light closer together
+        start = time.time()
         for bulb in bulbs:
             # transition light over specified length of time
-            print("Transition period: " + str(interval-count))
-            controls.setLight(bulb, interval-count, targetTemp, targetBrightness)
+            transition = max(interval-count, 1)
+            print("Transition period: " + str(transition))
+            controls.setLight(bulb, transition, targetTemp, targetBrightness)
         for bulb in bulbs:
             # set light to be target next time turned on
             controls.setPreset(bulb, 0, targetTemp, targetBrightness)
             controls.setDef(bulb, 0)
+        end = time.time()
+        count += int(end-start)
         # wait for next command
         if count < interval:
             print("sleep time = " + str(interval-count))
