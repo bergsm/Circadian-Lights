@@ -17,18 +17,11 @@ header = {"Content-Type": "application/json"}
 
 #debug controls
 #initDev()
-#getStatus(bulb1)
+controls.getStatus(bulb1)
 #controls.setLight(bulb1, 1, 2875, 80)
 #getStatus(bulb1)
 #getStatus(bulb2)
 #controls.setLight(bulb2, 1, 3800, 80)
-controls.setLightDirect(bulb1IP, 1, 3800, 80)
-controls.setLightDirect(bulb2IP, 1, 3800, 80)
-controls.setLightDirect(bulb3IP, 1, 3800, 80)
-
-#controls.setLightDirect(bulb1IP, 1, 2875, 30)
-#controls.setLightDirect(bulb2IP, 1, 2875, 30)
-#controls.setLightDirect(bulb3IP, 1, 2875, 30)
 #controls.setPreset(bulb2, 0, 3800, 80)
 #controls.setDefHard(bulb2, 0)
 #controls.setDefSoft(bulb2, 0)
