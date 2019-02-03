@@ -12,12 +12,12 @@ header = {"Content-Type": "application/json"}
 
 #debug controls
 #initDev()
-controls.getStatus(bulb3)
+print(controls.getStatus(bulb3))
 #controls.setLight(bulb1, 1, 2875, 80)
 #getStatus(bulb1)
 #getStatus(bulb2)
-controls.setLight(bulb3, 1, 2700, 1)
-controls.getStatus(bulb3)
+#controls.setLight(bulb3, 1, 2700, 1)
+#controls.getStatus(bulb3)
 #controls.setPreset(bulb2, 0, 3800, 80)
 #controls.setDefHard(bulb2, 0)
 #controls.setDefSoft(bulb2, 0)
