@@ -79,7 +79,10 @@ def changeLight(interval, targetTemp, targetBrightness, final):
             print("waiting...")
             if count < interval:
                 count+=1
+            start = time.time()
             status = controls.getStatus(bulbs[0])
+            end = time.time()
+            print(end-start)
 
     # if light unresponsive and not last change
     elif status == "error" and final == False:
