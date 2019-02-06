@@ -67,7 +67,7 @@ def writePID(hanging):
 
 
 # change the light
-def changeLight(interval, targetTemp, targetBrightness, final):
+def changeLight(interval, currTemp, currBrightness, targetTemp, targetBrightness, final):
     start = time.time()
     status = controls.getStatus(bulbs[0])
     end = time.time()
@@ -105,6 +105,7 @@ def changeLight(interval, targetTemp, targetBrightness, final):
                 print("skipping..")
                 return
     
+
     # if light responsive and off
     if status[0] == 0:
         print("light responsive and off")
@@ -119,24 +120,32 @@ def changeLight(interval, targetTemp, targetBrightness, final):
         if count < interval:
             print("sleep time = " + str(interval-count))
             time.sleep(interval-count)
-    
+
+
     # if light responsive and on
     if status[0] == 1:
         print("light responsive and on")
 
         # I split this into two loops to have the actual changing of each light closer together
         start = time.time()
-        for bulb in bulbs:
-            # transition light over specified length of time
-            transition = max(interval-count, 1)
-            print("Transition period: " + str(transition))
-            controls.setLight(bulb, transition, targetTemp, targetBrightness)
+        # Manual override detection. Only change light if no manual override detected
+        if status[1] == currTemp and status[2] == currBrightness:
+            for bulb in bulbs:
+                # transition light over specified length of time
+                transition = max(interval-count, 1)
+                print("Transition period: " + str(transition))
+                controls.setLight(bulb, transition, targetTemp, targetBrightness)
+        else:
+            print("Manual override detected, only changing default behavior")
+
         for bulb in bulbs:
             # set light to be target next time turned on
             controls.setPreset(bulb, 0, targetTemp, targetBrightness)
             controls.setDef(bulb, 0)
+
         end = time.time()
         count += int(end-start)
+
         # wait for next command
         if count < interval:
             print("sleep time = " + str(interval-count))
@@ -189,7 +198,7 @@ def transition(bulbs, states):
         
         # change the lights
         print("nextTemp = " + str(nextTemp) + ", nextBrightness = " + str(nextBrightness))
-        changeLight(interval, nextTemp, nextBrightness, final)
+        changeLight(interval, currTemp, currBrightness, nextTemp, nextBrightness, final)
 
         currTemp = nextTemp
         currBrightness = nextBrightness
