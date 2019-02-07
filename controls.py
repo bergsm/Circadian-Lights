@@ -47,13 +47,11 @@ def setDef(bulb, index):
 
 # change the default behavior of the light bulb when turned on by switch to a preset index
 def setDefHard(bulb, index):
-    #hard on (with switch)
     data = '{"smartlife.iot.smartbulb.lightingservice":{"set_default_behavior":{"hard_on":{"mode":"customize_preset","index":' + str(index) + '}}}}'
     sockSend(bulb, data)
     
 # change the default behavior of the light bulb when turned on by software to a preset index
 def setDefSoft(bulb, index):
-    #soft on (with app or alexa)
     data = '{"smartlife.iot.smartbulb.lightingservice":{"set_default_behavior":{"soft_on":{"mode":"customize_preset","index":' + str(index) + '}}}}'
     sockSend(bulb, data)
 
@@ -92,12 +90,13 @@ def getStatus(bulb):
  
 # initialize the file for the dictionary of the devices and their IDs
 def initDev():
+    programDir = os.path.dirname(os.path.abspath(__file__))
     # call bash script to save network devices to file
-    subprocess.call("bash/devIP.sh")
+    subprocess.call(programDir + "/bash/devIP.sh")
 
     # open network list for reading
-    fin = open('/home/pi/Circadian-Lights/network.list', 'r')
-    fout = open('/home/pi/Circadian-Lights/devices.list', 'w+')
+    fin = open(programDir + '/network.list', 'r')
+    fout = open(programDir + '/devices.list', 'w+')
     text = fin.readlines()
     for line in text:
         if line[0:5] == "LB130":
@@ -107,4 +106,4 @@ def initDev():
                     fout.write(IP + "\n")
 
     # delete network.list file
-    os.remove('network.list')
+    os.remove(programDir + '/network.list')

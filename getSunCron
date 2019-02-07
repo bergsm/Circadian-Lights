@@ -1,2 +1,2 @@
-0 0 * * * root /usr/bin/python /home/pi/Circadian-Lights/getSun.py
+0 0 * * * root /usr/bin/python /etc/cron.d/getSun.py
 

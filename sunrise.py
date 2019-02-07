@@ -5,16 +5,20 @@ import json
 import signal
 
 
+programDir = os.path.dirname(os.path.abspath(__file__))
+
 # load devices in from file
 def loadDev():
 
-    if os.path.exists("/home/pi/Circadian-Lights/devices.list"):
-        f = open("/home/pi/Circadian-Lights/devices.list", "r")
+    if os.path.exists(programDir + "/devices.list"):
+        f = open(programDir + "/devices.list", "r")
         bulbs = f.read().splitlines()
+        f.close()
     else:
         controls.initDev()
-        f = open("/home/pi/Circadian-Lights/devices.list", "r")
+        f = open(programDir + "/devices.list", "r")
         bulbs = f.read().splitlines()
+        f.close()
 
     print("Devices loaded successfully")
     return bulbs
@@ -22,15 +26,17 @@ def loadDev():
 
 # load the relevant values in from the file
 def loadStates():
-    if os.path.exists("/home/pi/Circadian-Lights/values.target"):
-        f = open("/home/pi/Circadian-Lights/values.target", "r")
+    if os.path.exists(programDir + "/values.target"):
+        f = open(programDir + "/values.target", "r")
         states = json.loads(f.read())
+        f.close()
     else:
         states = {"Night":{"Temp":2700,"Brightness":1},\
                   "Evening":{"Temp":2875,"Brightness":30},\
                   "Midday":{"Temp":3800,"Brightness":80}}
-        f = open("/home/pi/Circadian-Lights/values.target", "w+")
+        f = open(programDir + "/values.target", "w+")
         f.write(json.dumps(states))
+        f.close()
 
     print("States loaded successfully")
     return states
@@ -39,8 +45,9 @@ def loadStates():
 def killLast():
     # check last.pid
     print("Checking for any hanging scripts")
-    f = open("/home/pi/Circadian-Lights/last.pid", "r")
+    f = open(programDir + "/last.pid", "r")
     pid = int(f.readline())
+    f.close()
     
     # If script still running
     if pid >= 0:
@@ -57,12 +64,14 @@ def killLast():
 
 def writePID(hanging):
     if hanging == True:
-        f = open("/home/pi/Circadian-Lights/last.pid", "w+")
+        f = open(programDir + "/last.pid", "w+")
         f.write(str(os.getpid()))
+        f.close()
         print("Wrote PID to file")
     else:
-        f = open("/home/pi/Circadian-Lights/last.pid", "w+")
+        f = open(programDir + "/last.pid", "w+")
         f.write(str(-1))
+        f.close()
         print("Wrote dummy PID to file")
 
 
@@ -81,6 +90,9 @@ def changeLight(interval, currTemp, currBrightness, targetTemp, targetBrightness
             print("waiting...")
             start = time.time()
             status = controls.getStatus(bulbs[0])
+            if status != "error":
+                currTemp = status[1]
+                currBrightness = status[2]
             end = time.time()
             if count < interval:
                 count+=int(end-start)
@@ -94,6 +106,9 @@ def changeLight(interval, currTemp, currBrightness, targetTemp, targetBrightness
                 print("waiting...")
                 start = time.time()
                 status = controls.getStatus(bulbs[0])
+                if status != "error":
+                    currTemp = status[1]
+                    currBrightness = status[2]
                 end = time.time()
                 count+=int(end-start)
             # if light comes on, change it
@@ -104,7 +119,7 @@ def changeLight(interval, currTemp, currBrightness, targetTemp, targetBrightness
             if count >= interval:
                 print("skipping..")
                 return
-    
+
 
     # if light responsive and off
     if status[0] == 0:
