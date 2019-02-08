@@ -1,19 +1,51 @@
 import controls as controls
-
+from random import randint
 
 bulb1 = "192.168.1.143"
 bulb2 = "192.168.1.102"
 bulb3 = "192.168.1.121"
 
-url = "https://wap.tplinkcloud.com?token=ddc8c82d-A3pashRN9PvhV4s6HmfJyVe"
+bulbs = [bulb1, bulb2, bulb3]
 
-header = {"Content-Type": "application/json"}
-
-
+#while(1):
+#    controls.setLightOff(bulbs[randint(0,2)], 0, 3800, 100)
+#    controls.setLight(bulbs[randint(0,2)], 0, 3800, 100)
 #debug controls
+
+controls.lightShow(bulbs, 40)
+
+#for i in range(0, 5):
+#    for bulb in bulbs:
+#        controls.setLightOff(bulb, 0, 3800, 100)
+#    for bulb in bulbs:
+#        controls.setLight(bulb, 0, 3800, 100)
+#
+#for i in range(0, 5):
+#    for bulb in reversed(bulbs):
+#        controls.setLightOff(bulb, 0, 3800, 100)
+#    for bulb in reversed(bulbs):
+#        controls.setLight(bulb, 0, 3800, 100)
+
+#for i in range(0, 10):
+#    for bulb in bulbs:
+#        controls.setLightOff(bulb, 0, 3800, 100)
+#    for bulb in bulbs:
+#        controls.setLight(bulb, 0, 3800, 100)
+
+
+#controls.setLightOff(bulb1, 0, 3800, 100)
+#controls.setLightOff(bulb2, 0, 3800, 100)
+#controls.setLightOff(bulb3, 0, 3800, 100)
+#controls.setLight(bulb1, 0, 3800, 100)
+#controls.setLight(bulb2, 0, 3800, 100)
+#controls.setLight(bulb3, 0, 3800, 100)
+
+
+
+#controls.setLightOff(bulb1, 0, 3800, 100)
 #initDev()
-print(controls.getStatus(bulb3))
-#controls.setLight(bulb1, 1, 2875, 80)
+#controls.setLight(bulb1, 0, 3800, 100)
+#controls.setLightOff(bulb1, 0, 3800, 100)
 #getStatus(bulb1)
 #getStatus(bulb2)
 #controls.setLight(bulb3, 1, 2700, 1)

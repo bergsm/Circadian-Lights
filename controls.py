@@ -37,6 +37,30 @@ def sockSend(bulb, data):
     except socket.error:
         print("Could not connect to host " + bulb + ":" + str(PORT))
         return "error"
+
+def sockSendPersistent(bulbs, data):
+    sockets = {}
+    recv = ""
+    for b in bulbs: 
+        #print("bulb: " + b)
+        try:
+            s =  socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            bulbSock = s
+            LB = b
+            sockets[bulbSock] = LB
+            s.connect((sockets[s], PORT))
+        except socket.error:
+            print("Could not connect to host " + bulb + ":" + str(PORT))
+            return "error"
+         
+    switch = 1
+    for s in sockets:
+        #print(s)
+        s.send(encrypt(data))
+        #r = s.recv(2048)
+        #print(decrypt(r[4:]))
+        #recv += decrypt(r[4:])
+    #return recv
  
 #def debug(request):
 #    print(request.text)
@@ -61,6 +85,22 @@ def setLight(bulb, trans, temp, brightness):
     trans = trans * 1000
     data = '{"smartlife.iot.smartbulb.lightingservice":{"transition_light_state":{"ignore_default":1, "transition_period":'+ str(trans) + ', "on_off":1, "color_temp":' + str(temp) + ', "brightness":' + str(brightness) + '}}}'
     sockSend(bulb, data)
+
+def lightShow(bulbs, reps):
+    on = '{"smartlife.iot.smartbulb.lightingservice":{"transition_light_state":{"ignore_default":1, "transition_period":'+ str(0) + ', "on_off":1, "color_temp":' + str(3800) + ', "brightness":' + str(100) + '}}}'
+    off = '{"smartlife.iot.smartbulb.lightingservice":{"transition_light_state":{"ignore_default":1, "transition_period":'+ str(0) + ', "on_off":0, "color_temp":' + str(3800) + ', "brightness":' + str(100) + '}}}'
+
+    for i in range(0, reps):
+        sockSendPersistent(bulbs, off)
+        sockSendPersistent(bulbs, on)
+        
+
+
+def setLightOff(bulb, trans, temp, brightness):
+    trans = trans * 1000
+    data = '{"smartlife.iot.smartbulb.lightingservice":{"transition_light_state":{"ignore_default":1, "transition_period":'+ str(trans) + ', "on_off":0, "color_temp":' + str(temp) + ', "brightness":' + str(brightness) + '}}}'
+    sockSend(bulb, data)
+
 
 # change a preset
 def setPreset(bulb, index, temp, brightness):
