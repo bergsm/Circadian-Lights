@@ -1,10 +1,12 @@
+#import math
+
 def test(targetTemp, currTemp, targetBrightness, currBrightness):    
     print(targetTemp - currTemp)
-    tempInt = int((targetTemp - currTemp)/12.0)
+    tempInt = int(round((targetTemp - currTemp)/12.0))
     print(tempInt)
     print("tempInt " + str(tempInt))
     
-    brightInt = int((targetBrightness - currBrightness)/12.0)
+    brightInt = int(round((targetBrightness - currBrightness)/12.0))
     print(brightInt)
     print("brightInt " + str(brightInt))
 
@@ -28,4 +30,4 @@ def test(targetTemp, currTemp, targetBrightness, currBrightness):
         currBrightness = nextBrightness
 
 
-test(2875, 3800, 30, 80)
+test(2875, 3800, 30, 85)
