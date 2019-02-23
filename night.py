@@ -1,7 +1,7 @@
 import controls as controls
-import time 
-import os 
-import json 
+import time
+import os
+import json
 import signal
 
 
@@ -48,7 +48,7 @@ def killLast():
     f = open(programDir + "/last.pid", "r")
     pid = int(f.readline())
     f.close()
-    
+
     # If script still running
     if pid >= 0:
         #kill
@@ -82,7 +82,7 @@ def changeLight(interval, currTemp, currBrightness, targetTemp, targetBrightness
     end = time.time()
     count = int(end-start)
     # if light unresponsive and last change
-    if status == "error" and final == True: 
+    if status == "error" and final == True:
         print("unresponsive light and last change")
         writePID(True)
         # inf loop and wait to make change
@@ -119,7 +119,7 @@ def changeLight(interval, currTemp, currBrightness, targetTemp, targetBrightness
             if count >= interval:
                 print("skipping..")
                 return
-    
+
 
     # if light responsive and off
     if status[0] == 0:
@@ -170,11 +170,11 @@ def changeLight(interval, currTemp, currBrightness, targetTemp, targetBrightness
 # send 12 commands over an hour to transition light
 def transition(bulbs, states):
     # get last status of lights
-    status = controls.getStatus(bulbs[0]) 
+    status = controls.getStatus(bulbs[0])
 
     # read values for next state from file
-    targetTemp = states['Night']['Temp'] 
-    targetBrightness = states['Night']['Brightness'] 
+    targetTemp = states['Night']['Temp']
+    targetBrightness = states['Night']['Brightness']
     print("targetTemp: " + str(targetTemp))
     print("targetBrightness: " + str(targetBrightness))
 
@@ -183,17 +183,17 @@ def transition(bulbs, states):
         # use last state values for curr values
         currTemp = states['Evening']['Temp']
         currBrightness = states['Evening']['Brightness']
-    # light must be on so use current values 
+    # light must be on so use current values
     else:
         currTemp = status[1]
         currBrightness = status[2]
 
     # interval in seconds
     interval = 150
-    tempInt = int((targetTemp - currTemp)/12.0)
+    tempInt = int(round((targetTemp - currTemp)/12.0))
     print("tempInt " + str(tempInt))
-    
-    brightInt = int((targetBrightness - currBrightness)/12.0)
+
+    brightInt = int(round((targetBrightness - currBrightness)/12.0))
     print("brightInt " + str(brightInt))
 
     # while current bulb brightness and temp != daytime brightness and temp
@@ -201,16 +201,16 @@ def transition(bulbs, states):
     for i in range(12):
         print(i)
         print("currTemp = " + str(currTemp) + ", currBrightness = " + str(currBrightness))
-        
+
         # set the next temps and brightnesses
         nextTemp = currTemp + tempInt
         nextBrightness = currBrightness + brightInt
-        
+
         if i == 11:
             final = True
             nextTemp = targetTemp
             nextBrightness = targetBrightness
-        
+
         # change the lights
         print("nextTemp = " + str(nextTemp) + ", nextBrightness = " + str(nextBrightness))
         changeLight(interval, currTemp, currBrightness, nextTemp, nextBrightness, final)
