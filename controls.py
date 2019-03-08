@@ -100,6 +100,7 @@ def initDev():
     fout = open(programDir + '/devices.list', 'w+')
     text = fin.readlines()
     for line in text:
+        # TODO look for other TP-Link devices that will work with this code
         if line[0:5] == "LB130":
             for i in range(0, len(line)):
                 if line[i] == '(':
