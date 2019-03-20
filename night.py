@@ -45,7 +45,12 @@ def loadStates():
 def killLast():
     # check last.pid
     print("Checking for any hanging scripts")
-    f = open(programDir + "/last.pid", "r")
+    try:
+        f = open(programDir + "/last.pid", "r")
+        #TODO add open file exception
+    except:
+        f = open(programDir + "/last.pid", "w+")
+        f.write(str(-1))
     pid = int(f.readline())
     f.close()
 
