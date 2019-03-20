@@ -4,6 +4,7 @@ import json
 import socket
 from struct import pack
 
+#TODO port 1040 might be the UDP port
 PORT = 9999
 
 def encrypt(string):
@@ -37,7 +38,7 @@ def sockSend(bulb, data):
     except socket.error:
         print("Could not connect to host " + bulb + ":" + str(PORT))
         return "error"
- 
+
 #def debug(request):
 #    print(request.text)
 
@@ -49,7 +50,7 @@ def setDef(bulb, index):
 def setDefHard(bulb, index):
     data = '{"smartlife.iot.smartbulb.lightingservice":{"set_default_behavior":{"hard_on":{"mode":"customize_preset","index":' + str(index) + '}}}}'
     sockSend(bulb, data)
-    
+
 # change the default behavior of the light bulb when turned on by software to a preset index
 def setDefSoft(bulb, index):
     data = '{"smartlife.iot.smartbulb.lightingservice":{"set_default_behavior":{"soft_on":{"mode":"customize_preset","index":' + str(index) + '}}}}'
@@ -70,7 +71,7 @@ def setPreset(bulb, index, temp, brightness):
 # used to get the current status of the light
 def getStatus(bulb):
     data = '{"smartlife.iot.smartbulb.lightingservice":{"get_light_state":""}}'
-    r = sockSend(bulb, data) 
+    r = sockSend(bulb, data)
     if r == "error":
         return r
     else:
@@ -87,7 +88,7 @@ def getStatus(bulb):
         return[on_off, temp, brightness]
     else:
         return "error"
- 
+
 # initialize the file for the dictionary of the devices and their IDs
 def initDev():
     programDir = os.path.dirname(os.path.abspath(__file__))
