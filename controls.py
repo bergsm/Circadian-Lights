@@ -42,6 +42,8 @@ def sockSend(bulb, data):
 #def debug(request):
 #    print(request.text)
 
+#TODO consolidate set default functions and change light functions?
+
 def setDef(bulb, index):
     setDefHard(bulb, index)
     setDefSoft(bulb, index)

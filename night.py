@@ -79,7 +79,7 @@ def writePID(hanging):
         f.close()
         print("Wrote dummy PID to file")
 
-
+#TODO this should probably go in controls.py
 # change the light
 def changeLight(interval, currTemp, currBrightness, targetTemp, targetBrightness, final):
     start = time.time()
