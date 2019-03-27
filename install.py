@@ -28,6 +28,11 @@ if 'y' in ans:
 else:
     print("Ok. You can manually add devices at a later time by creating or editing the devices.list file\n")
 
+#TODO install getSun script into cron scheduling
 
+#TODO prompt user for timing of transition relative to sunrise and sunset. (This would involve modifying getSun)
 
+#TODO run getSun script once to set up sunRise and sunSet times.
+
+print("Congratulations! Your system is all set up and ready to go!)
 
