@@ -7,9 +7,9 @@ import signal
 
 programDir = os.path.dirname(os.path.abspath(__file__))
 
+#TODO move to controls
 # load devices in from file
 def loadDev():
-
     if os.path.exists(programDir + "/devices.list"):
         f = open(programDir + "/devices.list", "r")
         bulbs = f.read().splitlines()
@@ -24,6 +24,7 @@ def loadDev():
     return bulbs
 
 
+#TODO move to controls
 # load the relevant values in from the file
 def loadStates():
     if os.path.exists(programDir + "/values.target"):
@@ -33,7 +34,7 @@ def loadStates():
     else:
         states = {"Night":{"Temp":2700,"Brightness":1},\
                   "Evening":{"Temp":2875,"Brightness":30},\
-                  "Midday":{"Temp":3800,"Brightness":80}}
+                  "Midday":{"Temp":3630,"Brightness":85}}
         f = open(programDir + "/values.target", "w+")
         f.write(json.dumps(states))
         f.close()
@@ -47,12 +48,13 @@ def killLast():
     print("Checking for any hanging scripts")
     try:
         f = open(programDir + "/last.pid", "r")
-        #TODO add open file exception
-    except:
+    except IOError:
+        print("No last.pid file found.. creating dummy file..")
         f = open(programDir + "/last.pid", "w+")
         f.write(str(-1))
+    finally:
+        f.close()
     pid = int(f.readline())
-    f.close()
 
     # If script still running
     if pid >= 0:
@@ -174,6 +176,12 @@ def changeLight(interval, currTemp, currBrightness, targetTemp, targetBrightness
 # slowly transition the light from night to daytime
 # send 12 commands over an hour to transition light
 def transition(bulbs, states):
+    #TODO take interval, temp, brightness as command line arguments
+
+    #TODO uncomment after refactor
+    #bulbs = loadDev()
+    #states = loadStates()
+
     # get last status of lights
     status = controls.getStatus(bulbs[0])
 
@@ -224,6 +232,7 @@ def transition(bulbs, states):
         currBrightness = nextBrightness
 
 killLast()
+#TODO remove next two lines after refactor
 bulbs = loadDev()
 states = loadStates()
 transition(bulbs, states)
