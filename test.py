@@ -1,11 +1,14 @@
-#import math
+#!/usr/bin/python
+#import night as trans
 
-def test(targetTemp, currTemp, targetBrightness, currBrightness):    
+interval = 1
+
+def test(targetTemp, currTemp, targetBrightness, currBrightness):
     print(targetTemp - currTemp)
     tempInt = int(round((targetTemp - currTemp)/12.0))
     print(tempInt)
     print("tempInt " + str(tempInt))
-    
+
     brightInt = int(round((targetBrightness - currBrightness)/12.0))
     print(brightInt)
     print("brightInt " + str(brightInt))
@@ -23,7 +26,7 @@ def test(targetTemp, currTemp, targetBrightness, currBrightness):
             nextBrightness = targetBrightness
         # change the lights
         print("nextTemp = " + str(nextTemp) + ", nextBrightness = " + str(nextBrightness))
-        # changeLight(interval, nextTemp, nextBrightness, final)
+        changeLight(interval, nextTemp, nextBrightness, final)
 
         # set the next temps and brightnesses
         currTemp = nextTemp
