@@ -1,6 +1,6 @@
 {
-    "Night":{"Temp":2700,"Brightness":1}, 
-    "Evening":{"Temp":2875,"Brightness":30},
-    "Midday":{"Temp":3800,"Brightness":80}
+    "Night":{"Temp":2700,"Brightness":1},
+    "Evening":{"Temp":2875,"Brightness":35},
+    "Midday":{"Temp":3635,"Brightness":85}
 }
 

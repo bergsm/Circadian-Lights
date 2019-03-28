@@ -4,6 +4,7 @@ import json
 import socket
 from struct import pack
 
+#TODO port 1040 might be the UDP port
 PORT = 9999
 
 def encrypt(string):
@@ -38,30 +39,6 @@ def sockSend(bulb, data):
         print("Could not connect to host " + bulb + ":" + str(PORT))
         return "error"
 
-def sockSendPersistent(bulbs, data):
-    sockets = {}
-    recv = ""
-    for b in bulbs: 
-        #print("bulb: " + b)
-        try:
-            s =  socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            bulbSock = s
-            LB = b
-            sockets[bulbSock] = LB
-            s.connect((sockets[s], PORT))
-        except socket.error:
-            print("Could not connect to host " + bulb + ":" + str(PORT))
-            return "error"
-         
-    switch = 1
-    for s in sockets:
-        #print(s)
-        s.send(encrypt(data))
-        #r = s.recv(2048)
-        #print(decrypt(r[4:]))
-        #recv += decrypt(r[4:])
-    #return recv
- 
 #def debug(request):
 #    print(request.text)
 
@@ -73,7 +50,7 @@ def setDef(bulb, index):
 def setDefHard(bulb, index):
     data = '{"smartlife.iot.smartbulb.lightingservice":{"set_default_behavior":{"hard_on":{"mode":"customize_preset","index":' + str(index) + '}}}}'
     sockSend(bulb, data)
-    
+
 # change the default behavior of the light bulb when turned on by software to a preset index
 def setDefSoft(bulb, index):
     data = '{"smartlife.iot.smartbulb.lightingservice":{"set_default_behavior":{"soft_on":{"mode":"customize_preset","index":' + str(index) + '}}}}'
@@ -110,7 +87,7 @@ def setPreset(bulb, index, temp, brightness):
 # used to get the current status of the light
 def getStatus(bulb):
     data = '{"smartlife.iot.smartbulb.lightingservice":{"get_light_state":""}}'
-    r = sockSend(bulb, data) 
+    r = sockSend(bulb, data)
     if r == "error":
         return r
     else:
@@ -127,7 +104,7 @@ def getStatus(bulb):
         return[on_off, temp, brightness]
     else:
         return "error"
- 
+
 # initialize the file for the dictionary of the devices and their IDs
 def initDev():
     programDir = os.path.dirname(os.path.abspath(__file__))
