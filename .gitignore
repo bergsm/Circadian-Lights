@@ -1,4 +1,4 @@
 last.pid
 cron.log
-controls.pyc
+*.pyc
 devices.list
