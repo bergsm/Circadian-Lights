@@ -55,6 +55,3 @@ def loadStates():
 
     print("States loaded successfully")
     return states
-
-
-
