@@ -79,3 +79,15 @@ def killLast():
             print("Killed " + str(pid))
     else:
         print("Nothing to kill")
+
+def writePID(hanging):
+    if hanging == True:
+        f = open(programDir + "/last.pid", "w+")
+        f.write(str(os.getpid()))
+        f.close()
+        print("Wrote PID to file")
+    else:
+        f = open(programDir + "/last.pid", "w+")
+        f.write(str(-1))
+        f.close()
+        print("Wrote dummy PID to file")
