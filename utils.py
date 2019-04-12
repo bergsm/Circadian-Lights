@@ -46,9 +46,9 @@ def loadStates():
         states = json.loads(f.read())
         f.close()
     else:
-        states = {"Night":{"Temp":2700,"Brightness":1},\
-                  "Evening":{"Temp":2875,"Brightness":30},\
-                  "Midday":{"Temp":3630,"Brightness":85}}
+        states = {"Night":{"Temp":2700,"Brightness":1, "Prev":"Evening"},\
+                "Evening":{"Temp":2875,"Brightness":35, "Prev":"Midday"},\
+                "Midday":{"Temp":3635,"Brightness":85, "Prev":"Night"}}
         f = open(programDir + "/values.target", "w+")
         f.write(json.dumps(states))
         f.close()

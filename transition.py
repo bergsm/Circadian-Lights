@@ -3,7 +3,11 @@ import os
 import json
 import signal
 import utils
+import sys
 
+if (len(sys.argv) < 2):
+    print("Error: No transition state argument")
+    exit(1)
 
 programDir = os.path.dirname(os.path.abspath(__file__))
 
@@ -48,26 +52,30 @@ def writePID(hanging):
 # send 12 commands over an hour to transition light
 #def transition(bulbs, states):
 def transition():
-    #TODO take interval, temp, brightness as command line arguments
-
     # load devices and states into memory
     bulbs = utils.loadDev()
     states = utils.loadStates()
+
+    # set current and next states
+    nextState = sys.argv[1]
+    currState = states[nextState]['Prev']
+    print("Curr State: " + currState)
+    print("Next State: "  + nextState)
 
     # get last status of lights
     status = controls.getStatus(bulbs[0])
 
     # read values for next state from file
-    targetTemp = states['Night']['Temp']
-    targetBrightness = states['Night']['Brightness']
+    targetTemp = states[nextState]['Temp']
+    targetBrightness = states[nextState]['Brightness']
     print("targetTemp: " + str(targetTemp))
     print("targetBrightness: " + str(targetBrightness))
 
     # if light off
     if status == "error" or status[0] == 0:
         # use last state values for curr values
-        currTemp = states['Evening']['Temp']
-        currBrightness = states['Evening']['Brightness']
+        currTemp = states[currState]['Temp']
+        currBrightness = states[currState]['Brightness']
     # light must be on so use current values
     else:
         currTemp = status[1]
@@ -76,7 +84,8 @@ def transition():
     # interval in seconds
     #TODO uncomment when finished testing
     #interval = 150
-    interval = 1
+    interval = sys.argv[2]
+    print("Interval: " + str(interval))
     tempInt = int(round((targetTemp - currTemp)/12.0))
     print("tempInt " + str(tempInt))
 

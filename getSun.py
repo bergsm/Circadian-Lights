@@ -11,14 +11,8 @@ geoip_api_token = 'access_key=706012c40c1b18043fdcba7c996911bd' # create account
 def findScripts():
     scriptLoc = []
     call(['sudo', 'updatedb'])
-    sunrise = Popen(['locate', 'sunrise.py'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    sunrise = Popen(['locate', 'transition.py'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
     output, err = sunrise.communicate(b"input data that is passed to subprocess' stdin")
-    filepaths = output.splitlines()
-
-    scriptLoc.append(filepaths[0])
-
-    sunset = Popen(['locate', 'sunset.py'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    output, err = sunset.communicate(b"input data that is passed to subprocess' stdin")
     filepaths = output.splitlines()
 
     scriptLoc.append(filepaths[0])
@@ -58,12 +52,12 @@ scriptLoc = findScripts()
 # Parse out the sunrise and sunset time and convert to cron format
 sunriseEpoch = str(weather_obj['daily']['data'][0]['sunriseTime'])
 sunrise = (datetime.datetime.fromtimestamp(float(sunriseEpoch))-datetime.timedelta(hours=0, minutes=45)).strftime('%M %H')
-srCronCmd = sunrise + " * * * pi /usr/bin/python " + scriptLoc[0] + " >> /home/pi/Circadian-Lights/cron.log 2>&1\n"
+srCronCmd = sunrise + " * * * pi /usr/bin/python " + scriptLoc[0] + " Midday >> /home/pi/Circadian-Lights/cron.log 2>&1\n"
 #print(srCronCmd)
 
 sunsetEpoch = str(weather_obj['daily']['data'][0]['sunsetTime'])
 sunset = (datetime.datetime.fromtimestamp(float(sunsetEpoch))-datetime.timedelta(hours=0, minutes=45)).strftime('%M %H')
-ssCronCmd = sunset + " * * * pi /usr/bin/python " + scriptLoc[1] + " >> /home/pi/Circadian-Lights/cron.log 2>&1\n"
+ssCronCmd = sunset + " * * * pi /usr/bin/python " + scriptLoc[0] + " Evening >> /home/pi/Circadian-Lights/cron.log 2>&1\n"
 #print(ssCronCmd)
 
 # Schedule crontab jobs to run at sunrise and sunset
