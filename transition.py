@@ -11,29 +11,29 @@ if (len(sys.argv) < 2):
 
 programDir = os.path.dirname(os.path.abspath(__file__))
 
-def killLast():
-    # check last.pid
-    print("Checking for any hanging scripts")
-    try:
-        f = open(programDir + "/last.pid", "r")
-    except IOError:
-        print("No last.pid file found.. creating dummy file..")
-        f = open(programDir + "/last.pid", "w+")
-        f.write(str(-1))
-    pid = int(f.readline())
-    f.close()
-
-    # If script still running
-    if pid >= 0:
-        #kill
-        try:
-            os.kill(pid, signal.SIGTERM)
-        except:
-            print("Unable to kill previous process")
-        else:
-            print("Killed " + str(pid))
-    else:
-        print("Nothing to kill")
+#def killLast():
+#    # check last.pid
+#    print("Checking for any hanging scripts")
+#    try:
+#        f = open(programDir + "/last.pid", "r")
+#    except IOError:
+#        print("No last.pid file found.. creating dummy file..")
+#        f = open(programDir + "/last.pid", "w+")
+#        f.write(str(-1))
+#    pid = int(f.readline())
+#    f.close()
+#
+#    # If script still running
+#    if pid >= 0:
+#        #kill
+#        try:
+#            os.kill(pid, signal.SIGTERM)
+#        except:
+#            print("Unable to kill previous process")
+#        else:
+#            print("Killed " + str(pid))
+#    else:
+#        print("Nothing to kill")
 
 
 def writePID(hanging):
@@ -113,6 +113,6 @@ def transition():
         currTemp = nextTemp
         currBrightness = nextBrightness
 
-killLast()
+utils.killLast()
 transition()
 writePID(False)

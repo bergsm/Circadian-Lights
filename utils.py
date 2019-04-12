@@ -55,3 +55,27 @@ def loadStates():
 
     print("States loaded successfully")
     return states
+
+def killLast():
+    # check last.pid
+    print("Checking for any hanging scripts")
+    try:
+        f = open(programDir + "/last.pid", "r")
+    except IOError:
+        print("No last.pid file found.. creating dummy file..")
+        f = open(programDir + "/last.pid", "w+")
+        f.write(str(-1))
+    pid = int(f.readline())
+    f.close()
+
+    # If script still running
+    if pid >= 0:
+        #kill
+        try:
+            os.kill(pid, signal.SIGTERM)
+        except:
+            print("Unable to kill previous process")
+        else:
+            print("Killed " + str(pid))
+    else:
+        print("Nothing to kill")
