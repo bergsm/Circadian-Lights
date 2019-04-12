@@ -83,7 +83,7 @@ def transition():
 
     # interval in seconds
     #TODO define interval at top for easy customization. half it for night values
-    interval = sys.argv[2]
+    interval = int(sys.argv[2])
     print("Interval: " + str(interval))
     tempInt = int(round((targetTemp - currTemp)/12.0))
     print("tempInt " + str(tempInt))
