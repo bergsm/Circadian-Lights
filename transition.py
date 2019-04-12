@@ -82,8 +82,7 @@ def transition():
         currBrightness = status[2]
 
     # interval in seconds
-    #TODO uncomment when finished testing
-    #interval = 150
+    #TODO define interval at top for easy customization. half it for night values
     interval = sys.argv[2]
     print("Interval: " + str(interval))
     tempInt = int(round((targetTemp - currTemp)/12.0))

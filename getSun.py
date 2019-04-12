@@ -52,12 +52,12 @@ scriptLoc = findScripts()
 # Parse out the sunrise and sunset time and convert to cron format
 sunriseEpoch = str(weather_obj['daily']['data'][0]['sunriseTime'])
 sunrise = (datetime.datetime.fromtimestamp(float(sunriseEpoch))-datetime.timedelta(hours=0, minutes=45)).strftime('%M %H')
-srCronCmd = sunrise + " * * * pi /usr/bin/python " + scriptLoc[0] + " Midday >> /home/pi/Circadian-Lights/cron.log 2>&1\n"
+srCronCmd = sunrise + " * * * pi /usr/bin/python " + scriptLoc[0] + " Midday 300 >> /home/pi/Circadian-Lights/cron.log 2>&1\n"
 #print(srCronCmd)
 
 sunsetEpoch = str(weather_obj['daily']['data'][0]['sunsetTime'])
 sunset = (datetime.datetime.fromtimestamp(float(sunsetEpoch))-datetime.timedelta(hours=0, minutes=45)).strftime('%M %H')
-ssCronCmd = sunset + " * * * pi /usr/bin/python " + scriptLoc[0] + " Evening >> /home/pi/Circadian-Lights/cron.log 2>&1\n"
+ssCronCmd = sunset + " * * * pi /usr/bin/python " + scriptLoc[0] + " Evening 300 >> /home/pi/Circadian-Lights/cron.log 2>&1\n"
 #print(ssCronCmd)
 
 # Schedule crontab jobs to run at sunrise and sunset
