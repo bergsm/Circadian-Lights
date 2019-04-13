@@ -2,6 +2,10 @@ import controls
 import utils
 import sys
 
+
+# slowly transition the light from night to daytime
+# send 12 commands over an hour to transition light
+
 # Time in minutes for entire transition
 if (len(sys.argv) == 3):
     transPeriod = int(sys.argv[2])
@@ -15,13 +19,13 @@ if (len(sys.argv) < 2):
 # Time in seconds for each interval in transition
 interval = transPeriod/12 * 60
 
+# if transitioning to night, take half the time
 if (sys.argv[1] == 'Night'):
     interval = interval/2
 
-# slowly transition the light from night to daytime
-# send 12 commands over an hour to transition light
-#check for any unfinished transitions
+#check for any unfinished transitions and write PID to file
 utils.killLast()
+utils.writePID(False)
 
 # load devices and states into memory
 bulbs = utils.loadDev()
@@ -82,5 +86,5 @@ for i in range(12):
     currTemp = nextTemp
     currBrightness = nextBrightness
 
-#write PID to file
-utils.writePID(False)
+#write dummy PID to file
+utils.writePID(True)

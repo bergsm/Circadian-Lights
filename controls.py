@@ -3,6 +3,7 @@ import time
 import os
 import json
 import socket
+import utils
 from struct import pack
 programDir = os.path.dirname(os.path.abspath(__file__))
 
@@ -50,7 +51,7 @@ def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightnes
     # if light unresponsive and last change
     if status == "error" and final == True:
         print("unresponsive light and last change")
-        writePID(True)
+        utils.writePID(False)
         # inf loop and wait to make change
         while(status == "error"):
             print("waiting...")

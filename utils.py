@@ -80,8 +80,8 @@ def killLast():
     else:
         print("Nothing to kill")
 
-def writePID(hanging):
-    if hanging == True:
+def writePID(dummy):
+    if dummy == False:
         f = open(programDir + "/last.pid", "w+")
         f.write(str(os.getpid()))
         f.close()
