@@ -1,8 +1,10 @@
-import subprocess
+import time
 import os
 import json
 import socket
+import utils
 from struct import pack
+programDir = os.path.dirname(os.path.abspath(__file__))
 
 #TODO port 1040 might be the UDP port
 PORT = 9999
@@ -39,8 +41,99 @@ def sockSend(bulb, data):
         print("Could not connect to host " + bulb + ":" + str(PORT))
         return "error"
 
-#def debug(request):
-#    print(request.text)
+
+def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightness, final, bulbs):
+    start = time.time()
+    status = getStatus(bulbs[0])
+    end = time.time()
+    count = int(end-start)
+    # if light unresponsive and last change
+    if status == "error" and final == True:
+        print("unresponsive light and last change")
+        utils.writePID(False)
+        # inf loop and wait to make change
+        while(status == "error"):
+            print("waiting...")
+            start = time.time()
+            status = getStatus(bulbs[0])
+            if status != "error":
+                currTemp = status[1]
+                currBrightness = status[2]
+            end = time.time()
+            if count < interval:
+                count+=int(end-start)
+
+    # if light unresponsive and not last change
+    elif status == "error" and final == False:
+        print("unresponsive light but not last change")
+        # wait for the specifed time interval
+        while(count < interval):
+            if status == "error":
+                print("waiting...")
+                start = time.time()
+                status = getStatus(bulbs[0])
+                if status != "error":
+                    currTemp = status[1]
+                    currBrightness = status[2]
+                end = time.time()
+                count+=int(end-start)
+            # if light comes on, change it
+            elif status != "error":
+                print("light now on!")
+                break
+            # if light doesn't come on during interval, skip
+            if count >= interval:
+                print("skipping..")
+                return
+
+
+    # if light responsive and off
+    if status[0] == 0:
+        print("light responsive and off")
+        # set light to be target next time turned on
+        start = time.time()
+        for bulb in bulbs:
+            setPreset(bulb, 0, targetTemp, targetBrightness)
+            setDef(bulb, 0)
+        end = time.time()
+        count += int(end-start)
+        # wait for next command
+        if count < interval:
+            print("sleep time = " + str(interval-count))
+            time.sleep(interval-count)
+
+
+    # if light responsive and on
+    if status[0] == 1:
+        print("light responsive and on")
+
+        # I split this into two loops to have the actual changing of each light closer together
+        start = time.time()
+        # Manual override detection. Only change light if no manual override detected
+        if status[1] == currTemp and status[2] == currBrightness:
+            for bulb in bulbs:
+                # transition light over specified length of time
+                transition = max(interval-count, 1)
+                print("Transition period: " + str(transition))
+                setLight(bulb, transition, targetTemp, targetBrightness)
+        else:
+            print("Manual override detected, only changing default behavior")
+
+        for bulb in bulbs:
+            # set light to be target next time turned on
+            setPreset(bulb, 0, targetTemp, targetBrightness)
+            setDef(bulb, 0)
+
+        end = time.time()
+        count += int(end-start)
+
+        # wait for next command
+        if count < interval:
+            print("sleep time = " + str(interval-count))
+            time.sleep(interval-count)
+
+
+#TODO consolidate set default functions and change light functions?
 
 def setDef(bulb, index):
     setDefHard(bulb, index)
@@ -88,23 +181,3 @@ def getStatus(bulb):
         return[on_off, temp, brightness]
     else:
         return "error"
-
-# initialize the file for the dictionary of the devices and their IDs
-def initDev():
-    programDir = os.path.dirname(os.path.abspath(__file__))
-    # call bash script to save network devices to file
-    subprocess.call(programDir + "/bash/devIP.sh")
-
-    # open network list for reading
-    fin = open(programDir + '/network.list', 'r')
-    fout = open(programDir + '/devices.list', 'w+')
-    text = fin.readlines()
-    for line in text:
-        if line[0:5] == "LB130":
-            for i in range(0, len(line)):
-                if line[i] == '(':
-                    IP = line[i+1:i+14]
-                    fout.write(IP + "\n")
-
-    # delete network.list file
-    os.remove(programDir + '/network.list')
