@@ -11,8 +11,8 @@ geoip_api_token = 'access_key=706012c40c1b18043fdcba7c996911bd' # create account
 def findScripts():
     scriptLoc = []
     call(['sudo', 'updatedb'])
-    sunrise = Popen(['locate', 'transition.py'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    output, err = sunrise.communicate(b"input data that is passed to subprocess' stdin")
+    fp = Popen(['locate', 'transition.py'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    output, err = fp.communicate(b"input data that is passed to subprocess' stdin")
     filepaths = output.splitlines()
 
     scriptLoc.append(filepaths[0])
