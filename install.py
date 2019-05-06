@@ -34,5 +34,7 @@ else:
 
 #TODO run getSun script once to set up sunRise and sunSet times.
 
+#TODO sense the time of day and transition bulbs to correct brightness
+
 print("Congratulations! Your system is all set up and ready to go!)
 
