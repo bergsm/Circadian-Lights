@@ -1,6 +1,7 @@
 import subprocess
 import os
 import json
+import signal
 
 programDir = os.path.dirname(os.path.abspath(__file__))
 
@@ -73,8 +74,8 @@ def killLast():
         #kill
         try:
             os.kill(pid, signal.SIGTERM)
-        except:
-            print("Unable to kill previous process")
+        except Exception as e:
+            print("Unable to kill previous process: " + str(e))
         else:
             print("Killed " + str(pid))
     else:
