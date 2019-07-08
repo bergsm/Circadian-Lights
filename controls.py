@@ -38,7 +38,7 @@ def sockSend(bulb, data):
         s.close()
         return recv
     except socket.error:
-        print("Could not connect to host " + bulb + ":" + str(PORT))
+        print(str(utils.getTime()) + ": " + "Could not connect to host " + bulb + ":" + str(PORT))
         return "error"
 
 
@@ -49,11 +49,11 @@ def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightnes
     count = int(end-start)
     # if light unresponsive and last change
     if status == "error" and final == True:
-        print("unresponsive light and last change")
+        print(str(utils.getTime()) + ": " + "unresponsive light and last change")
         utils.writePID(False)
         # inf loop and wait to make change
         while(status == "error"):
-            print("waiting...")
+            print(str(utils.getTime()) + ": " + "waiting...")
             start = time.time()
             status = getStatus(bulbs[0])
             if status != "error":
@@ -65,11 +65,11 @@ def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightnes
 
     # if light unresponsive and not last change
     elif status == "error" and final == False:
-        print("unresponsive light but not last change")
+        print(str(utils.getTime()) + ": " + "unresponsive light but not last change")
         # wait for the specifed time interval
         while(count < interval):
             if status == "error":
-                print("waiting...")
+                print(str(utils.getTime()) + ": " + "waiting...")
                 start = time.time()
                 status = getStatus(bulbs[0])
                 if status != "error":
@@ -79,17 +79,17 @@ def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightnes
                 count+=int(end-start)
             # if light comes on, change it
             elif status != "error":
-                print("light now on!")
+                print(str(utils.getTime()) + ": " + "light now on!")
                 break
             # if light doesn't come on during interval, skip
             if count >= interval:
-                print("skipping..")
+                print(str(utils.getTime()) + ": " + "skipping..")
                 return
 
 
     # if light responsive and off
     if status[0] == 0:
-        print("light responsive and off")
+        print(str(utils.getTime()) + ": " + "light responsive and off")
         # set light to be target next time turned on
         start = time.time()
         for bulb in bulbs:
@@ -99,13 +99,13 @@ def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightnes
         count += int(end-start)
         # wait for next command
         if count < interval:
-            print("sleep time = " + str(interval-count))
+            print(str(utils.getTime()) + ": " + "sleep time = " + str(interval-count))
             time.sleep(interval-count)
 
 
     # if light responsive and on
     if status[0] == 1:
-        print("light responsive and on")
+        print(str(utils.getTime()) + ": " + "light responsive and on")
 
         # I split this into two loops to have the actual changing of each light closer together
         start = time.time()
@@ -114,10 +114,10 @@ def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightnes
             for bulb in bulbs:
                 # transition light over specified length of time
                 transition = max(interval-count, 1)
-                print("Transition period: " + str(transition))
+                print(str(utils.getTime()) + ": " + "Transition period: " + str(transition))
                 setLight(bulb, transition, targetTemp, targetBrightness)
         else:
-            print("Manual override detected, only changing default behavior")
+            print(str(utils.getTime()) + ": " + "Manual override detected, only changing default behavior")
 
         for bulb in bulbs:
             # set light to be target next time turned on
@@ -129,7 +129,7 @@ def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightnes
 
         # wait for next command
         if count < interval:
-            print("sleep time = " + str(interval-count))
+            print(str(utils.getTime()) + ": " + "sleep time = " + str(interval-count))
             time.sleep(interval-count)
 
 

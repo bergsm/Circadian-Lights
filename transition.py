@@ -13,7 +13,7 @@ else:
     transPeriod = 60
 
 if (len(sys.argv) < 2):
-    print("Error: No transition state argument")
+    print(str(utils.getTime()) + ": " + "Error: No transition state argument")
     exit(1)
 
 # Time in seconds for each interval in transition
@@ -67,7 +67,7 @@ print("brightInt " + str(brightInt))
 # while current bulb brightness and temp != daytime brightness and temp
 final = False
 for i in range(12):
-    print(i)
+    print(str(utils.getTime()) + ": " + i)
     print("currTemp = " + str(currTemp) + ", currBrightness = " + str(currBrightness))
 
     # set the next temps and brightnesses

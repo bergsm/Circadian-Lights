@@ -17,6 +17,7 @@ def findScripts():
 
     scriptLoc.append(filepaths[0])
 
+    print("Found transition script")
     return scriptLoc
 
 # get the ip address for use later in geo location
@@ -25,6 +26,7 @@ def get_ip():
         ip_url = "http://jsonip.com/"
         req = requests.get(ip_url)
         ip_json = json.loads(req.text)
+        print("IP address acquired")
         return ip_json['ip']
     except Exception as e:
         f.write("Error: %s." %e)
@@ -38,13 +40,14 @@ location_obj = json.loads(r.text)
 # get the latitude and longitude
 lat = location_obj['latitude']
 lon = location_obj['longitude']
+print("Location acquired")
 
 # get the local forecast for sunrise and sunset time
 #TODO add try catch logic for getting the forecast
 weather_req_url = "https://api.darksky.net/forecast/%s/%s,%s?lang=%s&units=%s" % (weather_api_token, lat, lon, 'en','us')
 r = requests.get(weather_req_url)
 weather_obj = json.loads(r.text)
-
+print("Weather acquired")
 
 #update filesystem data base and locate sunrise and sunset scripts
 scriptLoc = findScripts()
@@ -67,3 +70,4 @@ f2.write(srCronCmd)
 f3.write(ssCronCmd)
 f2.close()
 f3.close()
+print("Successfully updated sun times")

@@ -2,8 +2,13 @@ import subprocess
 import os
 import json
 import signal
+import datetime
 
 programDir = os.path.dirname(os.path.abspath(__file__))
+
+#used for debugging
+def getTime():
+    return datetime.datetime.now()
 
 # initialize the file for the dictionary of the devices and their IDs
 def initDev():
@@ -37,7 +42,7 @@ def loadDev():
         bulbs = f.read().splitlines()
         f.close()
 
-    print("Devices loaded successfully")
+    print(str(getTime()) + ": " + "Devices loaded successfully")
     return bulbs
 
 #Load the user specified light states from storage into memory
@@ -54,16 +59,16 @@ def loadStates():
         f.write(json.dumps(states))
         f.close()
 
-    print("States loaded successfully")
+    print(str(getTime()) + ": " + "States loaded successfully")
     return states
 
 def killLast():
     # check last.pid
-    print("Checking for any hanging scripts")
+    print(str(getTime()) + ": " + "Checking for any hanging scripts")
     try:
         f = open(programDir + "/last.pid", "r")
     except IOError:
-        print("No last.pid file found.. creating dummy file..")
+        print(str(getTime()) + ": " + "No last.pid file found.. creating dummy file..")
         f = open(programDir + "/last.pid", "w+")
         f.write(str(-1))
     pid = int(f.readline())
@@ -75,20 +80,20 @@ def killLast():
         try:
             os.kill(pid, signal.SIGTERM)
         except Exception as e:
-            print("Unable to kill previous process: " + str(e))
+            print(str(getTime()) + ": " + "Unable to kill previous process: " + str(e))
         else:
-            print("Killed " + str(pid))
+            print(str(getTime()) + ": " + "Killed " + str(pid))
     else:
-        print("Nothing to kill")
+        print(str(getTime()) + ": " + "Nothing to kill")
 
 def writePID(dummy):
     if dummy == False:
         f = open(programDir + "/last.pid", "w+")
         f.write(str(os.getpid()))
         f.close()
-        print("Wrote PID to file")
+        print(str(getTime()) + ": " + "Wrote PID to file")
     else:
         f = open(programDir + "/last.pid", "w+")
         f.write(str(-1))
         f.close()
-        print("Wrote dummy PID to file")
+        print(str(getTime()) + ": " + "Wrote dummy PID to file")
