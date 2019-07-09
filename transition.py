@@ -67,7 +67,7 @@ print("brightInt " + str(brightInt))
 # while current bulb brightness and temp != daytime brightness and temp
 final = False
 for i in range(12):
-    print(str(utils.getTime()) + ": " + i)
+    print(str(utils.getTime()) + ": " + str(i))
     print("currTemp = " + str(currTemp) + ", currBrightness = " + str(currBrightness))
 
     # set the next temps and brightnesses
