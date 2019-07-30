@@ -6,9 +6,9 @@ import utils
 from struct import pack
 programDir = os.path.dirname(os.path.abspath(__file__))
 
-#TODO port 1040 might be the UDP port
 PORT = 9999
 
+#TODO add bulb identifier to print statements for relevant commands
 def encrypt(string):
     key = 171
     result = pack('>I', len(string))
@@ -92,6 +92,7 @@ def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightnes
         print(str(utils.getTime()) + ": " + "light responsive and off")
         # set light to be target next time turned on
         start = time.time()
+        #TODO remove for loop
         for bulb in bulbs:
             setPreset(bulb, 0, targetTemp, targetBrightness)
             setDef(bulb, 0)
@@ -111,6 +112,7 @@ def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightnes
         start = time.time()
         # Manual override detection. Only change light if no manual override detected
         if status[1] == currTemp and status[2] == currBrightness:
+            #TODO remove for loop
             for bulb in bulbs:
                 # transition light over specified length of time
                 transition = max(interval-count, 1)
@@ -118,7 +120,7 @@ def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightnes
                 setLight(bulb, transition, targetTemp, targetBrightness)
         else:
             print(str(utils.getTime()) + ": " + "Manual override detected, only changing default behavior")
-
+        #TODO remove for loop
         for bulb in bulbs:
             # set light to be target next time turned on
             setPreset(bulb, 0, targetTemp, targetBrightness)

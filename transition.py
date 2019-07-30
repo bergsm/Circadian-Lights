@@ -1,6 +1,7 @@
 import controls
 import utils
 import sys
+import os
 
 
 # slowly transition the light from night to daytime
@@ -36,6 +37,12 @@ nextState = sys.argv[1]
 currState = states[nextState]['Prev']
 print("Curr State: " + currState)
 print("Next State: "  + nextState)
+
+for bulb in bulbs:
+    print(bulb)
+    #TODO spawn new process for each bulb
+    #TODO add bulb identifier to print statements
+
 
 # get last status of lights
 status = controls.getStatus(bulbs[0])

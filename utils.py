@@ -10,6 +10,7 @@ programDir = os.path.dirname(os.path.abspath(__file__))
 def getTime():
     return datetime.datetime.now()
 
+
 # initialize the file for the dictionary of the devices and their IDs
 def initDev():
     programDir = os.path.dirname(os.path.abspath(__file__))
@@ -30,6 +31,7 @@ def initDev():
     # delete network.list file
     os.remove(programDir + '/network.list')
 
+
 # load devices from storage into memory
 def loadDev():
     if os.path.exists(programDir + "/devices.list"):
@@ -44,6 +46,7 @@ def loadDev():
 
     print(str(getTime()) + ": " + "Devices loaded successfully")
     return bulbs
+
 
 #Load the user specified light states from storage into memory
 def loadStates():
@@ -62,6 +65,7 @@ def loadStates():
     print(str(getTime()) + ": " + "States loaded successfully")
     return states
 
+#TODO modify to handle multiple PIDs
 def killLast():
     # check last.pid
     print(str(getTime()) + ": " + "Checking for any hanging scripts")
@@ -85,6 +89,7 @@ def killLast():
             print(str(getTime()) + ": " + "Killed " + str(pid))
     else:
         print(str(getTime()) + ": " + "Nothing to kill")
+
 
 def writePID(dummy):
     if dummy == False:
