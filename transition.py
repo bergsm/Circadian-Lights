@@ -26,7 +26,7 @@ if (sys.argv[1] == 'Night'):
 
 #check for any unfinished transitions and write PID to file
 utils.killLast()
-utils.writePID(False)
+#utils.writePID(False)
 
 # load devices and states into memory
 bulbs = utils.loadDev()
@@ -41,6 +41,7 @@ print("Next State: "  + nextState)
 for bulb in bulbs:
     print(bulb)
     #TODO spawn new process for each bulb
+        #utils.writePID(False)
     #TODO add bulb identifier to print statements
 
 

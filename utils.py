@@ -75,20 +75,22 @@ def killLast():
         print(str(getTime()) + ": " + "No last.pid file found.. creating dummy file..")
         f = open(programDir + "/last.pid", "w+")
         f.write(str(-1))
-    pid = int(f.readline())
+    #pid = int(f.readline())
+    pids = int(f.read()splitlines())
     f.close()
 
     # If script still running
-    if pid >= 0:
-        #kill
-        try:
-            os.kill(pid, signal.SIGTERM)
-        except Exception as e:
-            print(str(getTime()) + ": " + "Unable to kill previous process: " + str(e))
+    for pid in pids:
+        if pid >= 0:
+            #kill
+            try:
+                os.kill(pid, signal.SIGTERM)
+            except Exception as e:
+                print(str(getTime()) + ": " + "Unable to kill process " + str(pid) + ": " + str(e))
+            else:
+                print(str(getTime()) + ": " + "Killed " + str(pid))
         else:
-            print(str(getTime()) + ": " + "Killed " + str(pid))
-    else:
-        print(str(getTime()) + ": " + "Nothing to kill")
+            print(str(getTime()) + ": " + "Nothing to kill")
 
 
 def writePID(dummy):
