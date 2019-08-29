@@ -65,7 +65,6 @@ def loadStates():
     print(str(getTime()) + ": " + "States loaded successfully")
     return states
 
-#TODO modify to handle multiple PIDs
 def killLast():
     # check last.pid
     print(str(getTime()) + ": " + "Checking for any hanging scripts")
@@ -76,7 +75,7 @@ def killLast():
         f = open(programDir + "/last.pid", "w+")
         f.write(str(-1))
     #pid = int(f.readline())
-    pids = int(f.read()splitlines())
+    pids = [int(x) for x in f.read().splitlines()]
     f.close()
 
     # If script still running
