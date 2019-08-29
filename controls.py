@@ -42,9 +42,9 @@ def sockSend(bulb, data):
         return "error"
 
 
-def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightness, final, bulbs):
+def changeLight(interval, currTemp, currBrightness, targetTemp, targetBrightness, final, bulb):
     start = time.time()
-    status = getStatus(bulbs[0])
+    status = getStatus(bulb)
     end = time.time()
     count = int(end-start)
     # if light unresponsive and last change
@@ -55,7 +55,7 @@ def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightnes
         while(status == "error"):
             print(str(utils.getTime()) + ": " + "waiting...")
             start = time.time()
-            status = getStatus(bulbs[0])
+            status = getStatus(bulb)
             if status != "error":
                 currTemp = status[1]
                 currBrightness = status[2]
@@ -71,7 +71,7 @@ def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightnes
             if status == "error":
                 print(str(utils.getTime()) + ": " + "waiting...")
                 start = time.time()
-                status = getStatus(bulbs[0])
+                status = getStatus(bulb)
                 if status != "error":
                     currTemp = status[1]
                     currBrightness = status[2]
@@ -92,10 +92,8 @@ def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightnes
         print(str(utils.getTime()) + ": " + "light responsive and off")
         # set light to be target next time turned on
         start = time.time()
-        #TODO remove for loop
-        for bulb in bulbs:
-            setPreset(bulb, 0, targetTemp, targetBrightness)
-            setDef(bulb, 0)
+        setPreset(bulb, 0, targetTemp, targetBrightness)
+        setDef(bulb, 0)
         end = time.time()
         count += int(end-start)
         # wait for next command
@@ -112,19 +110,105 @@ def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightnes
         start = time.time()
         # Manual override detection. Only change light if no manual override detected
         if status[1] == currTemp and status[2] == currBrightness:
-            #TODO remove for loop
-            for bulb in bulbs:
-                # transition light over specified length of time
-                transition = max(interval-count, 1)
-                print(str(utils.getTime()) + ": " + "Transition period: " + str(transition))
-                setLight(bulb, transition, targetTemp, targetBrightness)
+            # transition light over specified length of time
+            transition = max(interval-count, 1)
+            print(str(utils.getTime()) + ": " + "Transition period: " + str(transition))
+            setLight(bulb, transition, targetTemp, targetBrightness)
         else:
             print(str(utils.getTime()) + ": " + "Manual override detected, only changing default behavior")
-        #TODO remove for loop
-        for bulb in bulbs:
-            # set light to be target next time turned on
-            setPreset(bulb, 0, targetTemp, targetBrightness)
-            setDef(bulb, 0)
+
+        # set light to be target next time turned on
+        setPreset(bulb, 0, targetTemp, targetBrightness)
+        setDef(bulb, 0)
+
+        end = time.time()
+        count += int(end-start)
+
+        # wait for next command
+        if count < interval:
+            print(str(utils.getTime()) + ": " + "sleep time = " + str(interval-count))
+            time.sleep(interval-count)
+
+
+
+def changeLights(interval, currTemp, currBrightness, targetTemp, targetBrightness, final, bulb):
+    start = time.time()
+    status = getStatus(bulb)
+    end = time.time()
+    count = int(end-start)
+    # if light unresponsive and last change
+    if status == "error" and final == True:
+        print(str(utils.getTime()) + ": " + "unresponsive light and last change")
+        utils.writePID(False)
+        # inf loop and wait to make change
+        while(status == "error"):
+            print(str(utils.getTime()) + ": " + "waiting...")
+            start = time.time()
+            status = getStatus(bulb)
+            if status != "error":
+                currTemp = status[1]
+                currBrightness = status[2]
+            end = time.time()
+            if count < interval:
+                count+=int(end-start)
+
+    # if light unresponsive and not last change
+    elif status == "error" and final == False:
+        print(str(utils.getTime()) + ": " + "unresponsive light but not last change")
+        # wait for the specifed time interval
+        while(count < interval):
+            if status == "error":
+                print(str(utils.getTime()) + ": " + "waiting...")
+                start = time.time()
+                status = getStatus(bulb)
+                if status != "error":
+                    currTemp = status[1]
+                    currBrightness = status[2]
+                end = time.time()
+                count+=int(end-start)
+            # if light comes on, change it
+            elif status != "error":
+                print(str(utils.getTime()) + ": " + "light now on!")
+                break
+            # if light doesn't come on during interval, skip
+            if count >= interval:
+                print(str(utils.getTime()) + ": " + "skipping..")
+                return
+
+
+    # if light responsive and off
+    if status[0] == 0:
+        print(str(utils.getTime()) + ": " + "light responsive and off")
+        # set light to be target next time turned on
+        start = time.time()
+        setPreset(bulb, 0, targetTemp, targetBrightness)
+        setDef(bulb, 0)
+        end = time.time()
+        count += int(end-start)
+        # wait for next command
+        if count < interval:
+            print(str(utils.getTime()) + ": " + "sleep time = " + str(interval-count))
+            time.sleep(interval-count)
+
+
+    # if light responsive and on
+    if status[0] == 1:
+        print(str(utils.getTime()) + ": " + "light responsive and on")
+
+        # I split this into two loops to have the actual changing of each light closer together
+        start = time.time()
+        # Manual override detection. Only change light if no manual override detected
+        if status[1] == currTemp and status[2] == currBrightness:
+            # transition light over specified length of time
+            transition = max(interval-count, 1)
+            print(str(utils.getTime()) + ": " + "Transition period: " + str(transition))
+            setLight(bulb, transition, targetTemp, targetBrightness)
+        else:
+            print(str(utils.getTime()) + ": " + "Manual override detected, only changing default behavior")
+
+        # set light to be target next time turned on
+        setPreset(bulb, 0, targetTemp, targetBrightness)
+        setDef(bulb, 0)
 
         end = time.time()
         count += int(end-start)
