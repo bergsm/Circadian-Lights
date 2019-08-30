@@ -2,6 +2,7 @@ import controls
 import utils
 import sys
 import os
+import time
 
 
 # slowly transition the light from night to daytime
@@ -44,10 +45,11 @@ def parent():
         #spawn new process for each bulb
         newpid = os.fork()
         if newpid == 0:
-            child(bulb)
+            time.sleep(1)
+            child(bulb, states, nextState, currState, interval)
 
 
-def child(bulb):
+def child(bulb, states, nextState, currState, interval):
     # get last status of lights
     utils.writePID(False)
     status = controls.getStatus(bulb)
@@ -101,3 +103,5 @@ def child(bulb):
     #write dummy PID to file
     utils.writePID(True)
     os._exit(0)
+
+parent()

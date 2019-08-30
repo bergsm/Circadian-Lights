@@ -73,10 +73,11 @@ def killLast():
     except IOError:
         print(str(getTime()) + ": " + "No last.pid file found.. creating dummy file..")
         f = open(programDir + "/last.pid", "w+")
-        f.write(str(-1))
+        f.write(str(-1) + "\n")
     #pid = int(f.readline())
     pids = [int(x) for x in f.read().splitlines()]
     f.close()
+    os.remove(programDir + "/last.pid")
 
     # If script still running
     for pid in pids:
@@ -94,12 +95,12 @@ def killLast():
 
 def writePID(dummy):
     if dummy == False:
-        f = open(programDir + "/last.pid", "w+")
-        f.write(str(os.getpid()))
+        f = open(programDir + "/last.pid", "a+")
+        f.write(str(os.getpid()) + "\n")
         f.close()
         print(str(getTime()) + ": " + "Wrote PID to file")
     else:
-        f = open(programDir + "/last.pid", "w+")
-        f.write(str(-1))
+        f = open(programDir + "/last.pid", "a+")
+        f.write(str(-1) + "\n")
         f.close()
         print(str(getTime()) + ": " + "Wrote dummy PID to file")
