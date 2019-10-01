@@ -8,7 +8,6 @@ programDir = os.path.dirname(os.path.abspath(__file__))
 
 PORT = 9999
 
-#TODO add bulb identifier to print statements for relevant commands
 def encrypt(string):
     key = 171
     result = pack('>I', len(string))
