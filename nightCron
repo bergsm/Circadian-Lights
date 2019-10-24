@@ -1,1 +1,1 @@
-45 21 * * * pi /usr/bin/python /home/pi/Circadian-Lights/transition.py Night >> /home/pi/Circadian-Lights/cron.log 2>&1
+45 21 * * * pi /usr/bin/python /home/pi/SunLights/transition.py Night >> /home/pi/SunLights/cron.log 2>&1
