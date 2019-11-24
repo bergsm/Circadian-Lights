@@ -1,3 +1,5 @@
+## Contains functions which aid the running of the program itself
+
 import subprocess
 import os
 import json

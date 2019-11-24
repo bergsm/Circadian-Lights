@@ -1,3 +1,5 @@
+## Program which actually controls the transition of the bulbs between states
+
 import controls
 import utils
 import sys

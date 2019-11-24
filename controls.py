@@ -1,3 +1,5 @@
+## Contains functions for controlling the lights
+
 import time
 import os
 import json
