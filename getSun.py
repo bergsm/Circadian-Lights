@@ -1,3 +1,6 @@
+#This program fetches the sunrise and sunset times to be used to set the cron tasks
+#for running the transition scripts at the appropriate time
+
 import requests
 import json
 import datetime
