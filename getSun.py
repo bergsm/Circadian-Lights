@@ -29,9 +29,10 @@ def get_ip():
         print("IP address acquired")
         return ip_json['ip']
     except Exception as e:
-        f.write("Error: %s." %e)
-        traceback.print_exc()
-        return "Error: %s. Cannot get ip." % e
+        print("Error: %s." %e)
+        #traceback.print_exc()
+        exit(1)
+        #return "Error: %s. Cannot get ip." % e
 
 # Get the location from the ip address
 location_req_url = "http://api.ipstack.com/%s?%s" % (get_ip(), geoip_api_token)
@@ -56,12 +57,12 @@ scriptLoc = findScripts()
 sunriseEpoch = str(weather_obj['daily']['data'][0]['sunriseTime'])
 sunrise = (datetime.datetime.fromtimestamp(float(sunriseEpoch))-datetime.timedelta(hours=0, minutes=45)).strftime('%M %H')
 srCronCmd = sunrise + " * * * pi /usr/bin/python " + scriptLoc[0] + " Midday >> /home/pi/SunLights/cron.log 2>&1\n"
-#print(srCronCmd)
+print(srCronCmd)
 
 sunsetEpoch = str(weather_obj['daily']['data'][0]['sunsetTime'])
 sunset = (datetime.datetime.fromtimestamp(float(sunsetEpoch))-datetime.timedelta(hours=0, minutes=45)).strftime('%M %H')
 ssCronCmd = sunset + " * * * pi /usr/bin/python " + scriptLoc[0] + " Evening >> /home/pi/SunLights/cron.log 2>&1\n"
-#print(ssCronCmd)
+print(ssCronCmd)
 
 # Schedule crontab jobs to run at sunrise and sunset
 f2 = open('/etc/cron.d/sunriseCron', 'w')
