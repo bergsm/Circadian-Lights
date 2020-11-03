@@ -15,6 +15,9 @@ def getTime():
 
 # initialize the file for the dictionary of the devices and their IDs
 def initDev():
+    #TODO use nmap
+    #out = subprocess.check_output(['nmap', '-sn', '192.168.1.0/24'])
+
     programDir = os.path.dirname(os.path.abspath(__file__))
     # call bash script to save network devices to file
     subprocess.call(programDir + "/bash/devIP.sh")
